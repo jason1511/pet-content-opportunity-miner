@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pet Content Opportunity Miner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">Growth Engineer Demo</p>
+      <h1>Pet Content Opportunity Miner</h1>
+      <p class="subtitle">
+        Turn a pet-related keyword into search intent, content angles, FAQ ideas,
+        and a structured landing page brief.
+      </p>
+    </section>
+
+    <section class="card">
+      <label for="keyword" class="label">Pet keyword</label>
+      <div class="input-row">
+        <input
+          id="keyword"
+          type="text"
+          placeholder="e.g. dog insurance, cat dental cleaning, puppy anxiety"
+        />
+        <button id="generateBtn">Generate</button>
+      </div>
+      <p class="helper-text">
+        Start with one commercial or informational pet keyword.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="results" class="results-placeholder">
+        No results yet. Enter a keyword and click Generate.
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
