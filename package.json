@@ -1,15 +1,19 @@
 {
   "name": "pet-content-opportunity-miner",
   "version": "1.0.0",
-  "description": "AI-assisted SEO and landing page brief generator for pet content opportunities",
-  "main": "server.js",
-  "scripts": {
-    "dev": "node server.js"
-  },
+  "description": "AI-assisted SEO keyword mining tool for pet content",
   "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "openai": "^4.56.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.71.0"
   }
 }
