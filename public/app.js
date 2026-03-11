@@ -35,10 +35,15 @@ generateBtn.addEventListener("click", async () => {
 });
 
 function renderResults(data) {
+  const score = Math.floor(Math.random() * 3) + 7;
 
-  const score = Math.floor(Math.random() * 3) + 7; // temporary score 7–9
+  const briefText = buildBriefText(data, score);
 
   results.innerHTML = `
+    <div class="actions-row">
+      <button id="copyBriefBtn" class="secondary-btn">Copy Brief</button>
+    </div>
+
     <div class="score-card">
       <h2>Opportunity Score</h2>
       <div class="score">${score}/10</div>
@@ -62,17 +67,66 @@ function renderResults(data) {
 
     <div class="result-card">
       <h3>FAQ Schema Ideas</h3>
-      <ul>${data.faq_schema.map(f => `<li>${f}</li>`).join("")}</ul>
+      <ul>
+        ${data.faq_schema.map(f => `
+          <li>
+            <strong>${f.question}</strong><br>
+            ${f.answer}
+          </li>
+        `).join("")}
+      </ul>
     </div>
 
     <div class="result-card">
       <h3>Landing Page Brief</h3>
       <p><strong>Headline:</strong> ${data.page_brief.headline}</p>
-
       <p><strong>Sections:</strong></p>
       <ul>${data.page_brief.sections.map(s => `<li>${s}</li>`).join("")}</ul>
-
       <p><strong>CTA:</strong> ${data.page_brief.cta}</p>
     </div>
   `;
+
+  const copyBriefBtn = document.getElementById("copyBriefBtn");
+  copyBriefBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(briefText);
+      copyBriefBtn.textContent = "Copied!";
+      setTimeout(() => {
+        copyBriefBtn.textContent = "Copy Brief";
+      }, 1500);
+    } catch {
+      copyBriefBtn.textContent = "Copy failed";
+      setTimeout(() => {
+        copyBriefBtn.textContent = "Copy Brief";
+      }, 1500);
+    }
+  });
+}
+
+function buildBriefText(data, score) {
+  return `
+Pet Content Opportunity Miner
+Opportunity Score: ${score}/10
+
+Search Intent
+${data.intent}
+
+User Questions
+${data.user_questions.map((q, i) => `${i + 1}. ${q}`).join("\n")}
+
+Landing Page Ideas
+${data.landing_page_ideas.map((idea, i) => `${i + 1}. ${idea}`).join("\n")}
+
+FAQ Schema Ideas
+${data.faq_schema.map((f, i) => `${i + 1}. ${f.question}\n   ${f.answer}`).join("\n")}
+
+Landing Page Brief
+Headline: ${data.page_brief.headline}
+
+Sections
+${data.page_brief.sections.map((s, i) => `${i + 1}. ${s}`).join("\n")}
+
+CTA
+${data.page_brief.cta}
+  `.trim();
 }
