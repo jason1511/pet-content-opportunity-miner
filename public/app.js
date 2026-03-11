@@ -35,8 +35,7 @@ generateBtn.addEventListener("click", async () => {
 });
 
 function renderResults(data) {
-  const score = Math.floor(Math.random() * 3) + 7;
-
+  const score = Number(data.opportunity_score || 0).toFixed(1);
   const briefText = buildBriefText(data, score);
 
   results.innerHTML = `
@@ -47,7 +46,7 @@ function renderResults(data) {
     <div class="score-card">
       <h2>Opportunity Score</h2>
       <div class="score">${score}/10</div>
-      <p>Estimated potential for a content landing page.</p>
+      <p>${data.score_reason}</p>
     </div>
 
     <div class="result-card">
@@ -107,6 +106,9 @@ function buildBriefText(data, score) {
   return `
 Pet Content Opportunity Miner
 Opportunity Score: ${score}/10
+
+Score Reason
+${data.score_reason}
 
 Search Intent
 ${data.intent}

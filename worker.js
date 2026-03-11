@@ -19,16 +19,31 @@ Keyword: "${keyword}"
 Return ONLY valid JSON in this structure:
 
 {
+  "opportunity_score": 8.4,
+  "score_reason": "Short explanation of why this keyword is valuable or not valuable.",
   "intent": "short explanation of the search intent",
   "user_questions": ["question1","question2","question3","question4","question5"],
   "landing_page_ideas": ["idea1","idea2","idea3","idea4","idea5"],
-  "faq_schema": ["faq1","faq2","faq3","faq4","faq5"],
+  "faq_schema": [
+    {
+      "question": "Question here",
+      "answer": "Short answer here"
+    }
+  ],
   "page_brief": {
     "headline": "landing page headline",
     "sections": ["section1","section2","section3","section4"],
     "cta": "call to action"
   }
 }
+
+Rules:
+- opportunity_score must be a number from 1 to 10
+- score_reason must be one short paragraph
+- faq_schema must contain exactly 5 objects with question and answer fields
+- user_questions must contain exactly 5 items
+- landing_page_ideas must contain exactly 5 items
+- page_brief.sections must contain exactly 4 items
 
 Do not include markdown. Only return JSON.
 `;
