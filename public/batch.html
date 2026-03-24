@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pet Content Opportunity Miner — Batch Mode</title>
+  <link rel="stylesheet" href="base.css" />
+<link rel="stylesheet" href="batch.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">Growth Engineer Demo</p>
+      <h1>Batch Keyword Analysis</h1>
+      <p class="subtitle">
+        Evaluate multiple pet-related keywords, rank opportunities, and identify
+        the strongest landing page candidates.
+      </p>
+    </section>
+
+    <section class="card nav-card">
+      <div class="page-nav">
+        <a href="index.html" class="nav-link">Single Workflow</a>
+        <a href="batch.html" class="nav-link active-nav-link">Batch Mode</a>
+      </div>
+    </section>
+    <section class="card demo-banner">
+  <div>
+    <p class="eyebrow">Instant Demo</p>
+    <h2>Run a sample batch instantly</h2>
+    <p class="subtitle-small">
+      Load a realistic set of pet keywords to preview ranking and keyword detail without typing anything.
+    </p>
+  </div>
+  <button id="loadBatchDemoBtn" class="secondary-btn">Load Demo Batch</button>
+</section>
+
+    <section class="card">
+      <h2>Batch Mode</h2>
+      <label for="batchKeywords" class="label">Paste one keyword per line</label>
+      <textarea
+        id="batchKeywords"
+        class="batch-textarea"
+        placeholder="dog insurance&#10;cat insurance&#10;puppy anxiety"
+      ></textarea>
+
+      <div class="input-row">
+        <button id="runBatchBtn" class="secondary-btn">Run Batch Analysis</button>
+      </div>
+
+      <p class="helper-text">
+        Batch mode scores multiple keyword opportunities and ranks them by potential.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Batch Results</h2>
+      <div id="batchResults" class="results-placeholder">
+        No batch results yet.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Selected Keyword Detail</h2>
+      <div id="batchDetailResults" class="results-placeholder">
+        No keyword selected yet. Run a batch and click a result to inspect details.
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="batch.js"></script>
+</body>
+</html>

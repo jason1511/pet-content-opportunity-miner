@@ -4,41 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pet Content Opportunity Miner</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="base.css" />
+<link rel="stylesheet" href="single.css" />
 </head>
 <body>
-  <main class="container">
-    <section class="hero">
-      <p class="eyebrow">Growth Engineer Demo</p>
-      <h1>Pet Content Opportunity Miner</h1>
-      <p class="subtitle">
-        Turn a pet-related keyword into search intent, content angles, FAQ ideas,
-        and a structured landing page brief.
-      </p>
-    </section>
+ <main class="container">
+  <section class="hero">
+  <p class="eyebrow">Growth Engineer Demo</p>
+  <h1>Single Keyword Workflow</h1>
+  <p class="subtitle">
+    Deep-dive analysis for one keyword. Generate structured landing page briefs,
+    insights, and QA checks in a single workflow.
+  </p>
+</section>
+  <section class="card nav-card">
+  <div class="page-nav">
+    <a href="index.html" class="nav-link active-nav-link">Single Workflow</a>
+    <a href="batch.html" class="nav-link">Batch Mode</a>
+  </div>
+</section>
+<section class="card demo-banner">
+  <div>
+    <p class="eyebrow">Instant Demo</p>
+    <h2>See a live example immediately</h2>
+    <p class="subtitle-small">
+      Preview how the system researches a keyword, generates a structured brief,
+      and runs QA checks before you type anything.
+    </p>
+  </div>
+  <button id="loadDemoBtn" class="secondary-btn">Load Demo: dog insurance</button>
+</section>
+<section class="card value-strip">
+  <div class="value-box">
+    <h3>Without this tool</h3>
+    <p>Manual keyword research, unclear content direction, and scattered landing page ideas.</p>
+  </div>
 
-    <section class="card">
-      <label for="keyword" class="label">Pet keyword</label>
-      <div class="input-row">
-        <input
-          id="keyword"
-          type="text"
-          placeholder="e.g. dog insurance, cat dental cleaning, puppy anxiety"
-        />
-        <button id="generateBtn">Generate</button>
-      </div>
-      <p class="helper-text">
-        Start with one commercial or informational pet keyword.
-      </p>
-    </section>
+  <div class="value-box">
+    <h3>With this tool</h3>
+    <p>Research signals, structured page briefs, QA checks, and actionable recommendations in one workflow.</p>
+  </div>
+</section>
 
-    <section class="card">
-      <h2>Results</h2>
-      <div id="results" class="results-placeholder">
-        No results yet. Enter a keyword and click Generate.
-      </div>
-    </section>
-  </main>
+<section class="card">
+  <summary><strong>How This Works</strong></summary>
+  <div class="how-grid">
+    <div class="how-step">
+      <h3>1. Research</h3>
+      <p>Collects autocomplete-style signals, mined questions, and keyword angles.</p>
+    </div>
+    <div class="how-step">
+      <h3>2. Generate</h3>
+      <p>Uses AI to score the keyword, summarize intent, and create a structured landing page brief.</p>
+    </div>
+    <div class="how-step">
+      <h3>3. QA</h3>
+      <p>Runs checks on output quality, structure, CTA strength, and landing page readiness.</p>
+    </div>
+  </div>
+</section>
+  <section class="card">
+    <label for="keyword" class="label">Pet keyword</label>
+    <div class="input-row">
+      <input
+        id="keyword"
+        type="text"
+        placeholder="e.g. dog insurance, cat dental cleaning, puppy anxiety"
+      />
+      <button id="generateBtn">Run Workflow</button>
+    </div>
+    <p class="helper-text">
+      Research → Generation → QA
+    </p>
+  </section>
+  <section class="workflow-bar card">
+    <div class="workflow-step active">1. Research</div>
+    <div class="workflow-step">2. Generation</div>
+    <div class="workflow-step">3. QA</div>
+  </section>
+
+  <section class="card">
+    <h2>Research</h2>
+    <div id="researchResults" class="results-placeholder">
+      No research data yet.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generation</h2>
+    <div id="generationResults" class="results-placeholder">
+      No generated brief yet.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>QA</h2>
+    <div id="qaResults" class="results-placeholder">
+      No QA checks yet.
+    </div>
+  </section>
+</main>
 
   <script src="app.js"></script>
 </body>

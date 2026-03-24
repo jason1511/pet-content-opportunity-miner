@@ -1,58 +1,56 @@
+import { buildResearchSignals } from "./shared.js";
+
 const generateBtn = document.getElementById("generateBtn");
 const keywordInput = document.getElementById("keyword");
 const loadDemoBtn = document.getElementById("loadDemoBtn");
+
 const researchResults = document.getElementById("researchResults");
 const generationResults = document.getElementById("generationResults");
 const qaResults = document.getElementById("qaResults");
-const batchKeywordsInput = document.getElementById("batchKeywords");
-const runBatchBtn = document.getElementById("runBatchBtn");
-const batchResults = document.getElementById("batchResults");
 
-generateBtn.addEventListener("click", async () => {
-  const keyword = keywordInput.value.trim();
+if (generateBtn && keywordInput) {
+  generateBtn.addEventListener("click", async () => {
+    const keyword = keywordInput.value.trim();
 
-  if (!keyword) {
-    researchResults.textContent = "Please enter a pet-related keyword.";
-    generationResults.textContent = "No generated brief yet.";
-    qaResults.textContent = "No QA checks yet.";
-    return;
+    if (!keyword) {
+      researchResults.textContent = "Please enter a pet-related keyword.";
+      generationResults.textContent = "No generated brief yet.";
+      qaResults.textContent = "No QA checks yet.";
+      return;
+    }
+
+    await runWorkflow(keyword);
+  });
+}
+
+if (loadDemoBtn && keywordInput) {
+  loadDemoBtn.addEventListener("click", async () => {
+    const demoKeyword = "dog insurance";
+    keywordInput.value = demoKeyword;
+    await runWorkflow(demoKeyword);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const keywordFromUrl = params.get("keyword");
+
+  const keyword = keywordFromUrl || "dog insurance";
+
+  if (keywordInput) {
+    keywordInput.value = keyword;
+    await runWorkflow(keyword);
   }
-
-  await runWorkflow(keyword);
 });
-runBatchBtn.addEventListener("click", async () => {
-  const raw = batchKeywordsInput.value.trim();
 
-  if (!raw) {
-    batchResults.textContent = "Please paste at least one keyword.";
-    return;
-  }
-
-  const keywords = raw
-    .split("\n")
-    .map(item => item.trim())
-    .filter(Boolean);
-
-  if (keywords.length === 0) {
-    batchResults.textContent = "Please paste valid keywords.";
-    return;
-  }
-
-  await runBatchWorkflow(keywords);
-});
-loadDemoBtn.addEventListener("click", async () => {
-  const demoKeyword = "dog insurance";
-  keywordInput.value = demoKeyword;
-  await runWorkflow(demoKeyword);
-});
 async function runWorkflow(keyword) {
   generateBtn.disabled = true;
   if (loadDemoBtn) loadDemoBtn.disabled = true;
 
   generateBtn.textContent = "Running...";
-  researchResults.innerHTML = `<p class="loading-text">Collecting research signals...</p>`;
-  generationResults.innerHTML = `<p class="loading-text">Generating structured brief...</p>`;
-  qaResults.innerHTML = `<p class="loading-text">Running QA checks...</p>`;
+researchResults.innerHTML = `<p class="loading-text">🔍 Collecting search signals...</p>`;
+generationResults.innerHTML = `<p class="loading-text">🧠 Generating structured brief...</p>`;
+qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
 
   try {
     const researchData = await buildResearchSignals(keyword);
@@ -98,124 +96,6 @@ async function runWorkflow(keyword) {
     generateBtn.textContent = "Run Workflow";
   }
 }
-async function buildResearchSignals(keyword) {
-  const normalized = keyword.toLowerCase().trim();
-  const keywordType = classifyKeywordType(normalized);
-
-  let liveAutocomplete = [];
-
-  try {
-    const response = await fetch(`/api/autocomplete?keyword=${encodeURIComponent(normalized)}`);
-    const data = await response.json();
-
-    if (response.ok && Array.isArray(data.suggestions)) {
-      liveAutocomplete = data.suggestions.slice(0, 8);
-    }
-  } catch (error) {
-    console.error("Autocomplete fetch failed:", error);
-  }
-
-  const fallbackAutocomplete = [
-    `${normalized} cost`,
-    `${normalized} near me`,
-    `${normalized} australia`,
-    `best ${normalized}`,
-    `${normalized} reviews`
-  ];
-
-  const autocompleteSuggestions =
-    liveAutocomplete.length > 0 ? liveAutocomplete : fallbackAutocomplete;
-
-  let relatedQuestions = [];
-
-  try {
-    const response = await fetch("/api/questions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        keyword: normalized,
-        suggestions: autocompleteSuggestions
-      })
-    });
-
-    const data = await response.json();
-
-    if (response.ok && Array.isArray(data.questions)) {
-      relatedQuestions = data.questions;
-    }
-  } catch (error) {
-    console.error("Question mining failed:", error);
-  }
-
-  const fallbackQuestions = [
-    `What is the average ${normalized} cost?`,
-    `Is ${normalized} worth it?`,
-    `How does ${normalized} work?`,
-    `What should I compare before choosing ${normalized}?`,
-    `Who is ${normalized} best for?`,
-    `What are the common mistakes when choosing ${normalized}?`
-  ];
-
-  const userQuestionSeeds =
-    relatedQuestions.length > 0 ? relatedQuestions : fallbackQuestions;
-
-  const contentAngles = [
-    `${capitalize(normalized)} cost guide`,
-    `${capitalize(normalized)} comparison page`,
-    `${capitalize(normalized)} explained for first-time pet owners`,
-    `Best options for ${normalized} in Australia`,
-    `${capitalize(normalized)} FAQs and common mistakes`
-  ];
-
-  return {
-    keyword: normalized,
-    keywordType,
-    autocompleteSuggestions,
-    userQuestionSeeds,
-    contentAngles,
-    sourceMeta: {
-      autocompleteSource: liveAutocomplete.length > 0 ? "Live suggestions" : "Fallback suggestions",
-      questionSource: relatedQuestions.length > 0 ? "AI-mined from research signals" : "Fallback questions"
-    }
-  };
-}
-
-function classifyKeywordType(keyword) {
-  const commercialTerms = [
-    "insurance",
-    "cost",
-    "price",
-    "plan",
-    "coverage",
-    "treatment",
-    "service",
-    "vet",
-    "clinic"
-  ];
-
-  const informationalTerms = [
-    "how",
-    "why",
-    "what",
-    "guide",
-    "tips",
-    "help",
-    "symptoms",
-    "causes"
-  ];
-
-  if (commercialTerms.some(term => keyword.includes(term))) {
-    return "Commercial / conversion-friendly";
-  }
-
-  if (informationalTerms.some(term => keyword.includes(term))) {
-    return "Informational";
-  }
-
-  return "Mixed / unclear intent";
-}
 
 function renderResearch(data) {
   researchResults.innerHTML = `
@@ -249,6 +129,7 @@ function renderResearch(data) {
     </div>
   `;
 }
+
 function renderGeneration(data) {
   const score = Number(data.opportunity_score || 0).toFixed(1);
 
@@ -318,6 +199,7 @@ function renderGeneration(data) {
     </div>
   `;
 }
+
 function runQaChecks(keyword, data) {
   const checks = [];
 
@@ -368,19 +250,20 @@ function runQaChecks(keyword, data) {
     status: Array.isArray(data.faq_schema) && data.faq_schema.every(item => item.answer && item.answer.trim().length > 0),
     detail: "Each FAQ should include a useful answer"
   });
-checks.push({
-  label: "Recommendation is present",
-  status: !!data.recommendation && data.recommendation.trim().length > 20,
-  detail: data.recommendation || "No recommendation found"
-});
 
-checks.push({
-  label: "Exactly 3 risk flags generated",
-  status: Array.isArray(data.risk_flags) && data.risk_flags.length === 3,
-  detail: `${data.risk_flags?.length || 0} risk flags found`
-});
+  checks.push({
+    label: "Recommendation is present",
+    status: !!data.recommendation && data.recommendation.trim().length > 20,
+    detail: data.recommendation || "No recommendation found"
+  });
+
+  checks.push({
+    label: "Exactly 3 risk flags generated",
+    status: Array.isArray(data.risk_flags) && data.risk_flags.length === 3,
+    detail: `${data.risk_flags?.length || 0} risk flags found`
+  });
+
   const passedCount = checks.filter(check => check.status).length;
-  const failedChecks = checks.filter(check => !check.status);
 
   const suggestions = [];
 
@@ -398,6 +281,14 @@ checks.push({
 
   if (!checks[7].status) {
     suggestions.push("Expand FAQ answers so they feel more useful and complete.");
+  }
+
+  if (!checks[8].status) {
+    suggestions.push("Add a clearer recommendation so the output feels more actionable.");
+  }
+
+  if (!checks[9].status) {
+    suggestions.push("Add three concise risk flags to show decision quality and trade-offs.");
   }
 
   if (suggestions.length === 0) {
@@ -468,95 +359,4 @@ function hasActionVerb(text) {
 
   const lowerText = text.toLowerCase();
   return actionWords.some(word => lowerText.includes(word));
-}
-function capitalize(text) {
-  if (!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-window.addEventListener("DOMContentLoaded", async () => {
-  const demoKeyword = "dog insurance";
-  keywordInput.value = demoKeyword;
-  await runWorkflow(demoKeyword);
-});
-async function runBatchWorkflow(keywords) {
-  runBatchBtn.disabled = true;
-  runBatchBtn.textContent = "Running batch...";
-
-  batchResults.innerHTML = `<p class="loading-text">Processing ${keywords.length} keywords...</p>`;
-
-  const results = [];
-
-  for (let i = 0; i < keywords.length; i++) {
-    const keyword = keywords[i];
-
-    batchResults.innerHTML = `
-      <p class="loading-text">
-        Processing ${i + 1} of ${keywords.length}: <strong>${keyword}</strong>
-      </p>
-    `;
-
-    try {
-      const researchData = await buildResearchSignals(keyword);
-
-      const response = await fetch("/api/mine", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          keyword,
-          researchData
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Generation failed");
-      }
-
-      results.push({
-        keyword,
-        score: Number(data.opportunity_score || 0),
-        recommendation: data.recommendation || "No recommendation returned.",
-        keywordType: researchData.keywordType,
-        scoreReason: data.score_reason || "No score reason returned."
-      });
-    } catch (error) {
-      results.push({
-        keyword,
-        score: 0,
-        recommendation: `Batch analysis failed: ${error.message}`,
-        keywordType: "Unknown",
-        scoreReason: "No score available due to an error."
-      });
-    }
-  }
-
-  results.sort((a, b) => b.score - a.score);
-  renderBatchResults(results);
-
-  runBatchBtn.disabled = false;
-  runBatchBtn.textContent = "Run Batch Analysis";
-}
-
-function renderBatchResults(items) {
-  if (!items.length) {
-    batchResults.textContent = "No batch results available.";
-    return;
-  }
-
-  batchResults.innerHTML = `
-    <div class="batch-list">
-      ${items.map(item => `
-        <div class="batch-item">
-          <h3>${item.keyword}</h3>
-          <p class="batch-meta"><strong>Keyword Type:</strong> ${item.keywordType}</p>
-          <p class="batch-meta"><strong>Why it scored this way:</strong> ${item.scoreReason}</p>
-          <p class="batch-meta"><strong>Recommendation:</strong> ${item.recommendation}</p>
-          <span class="batch-score">Opportunity Score: ${item.score.toFixed(1)}/10</span>
-        </div>
-      `).join("")}
-    </div>
-  `;
 }
