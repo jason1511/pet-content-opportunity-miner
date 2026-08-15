@@ -127,6 +127,9 @@ Rules:
     );
   }
 }
+    if (request.method === "POST" && url.pathname === "/api/estimate") {
+      return handleVetEstimate(request, env);
+    }
     if (request.method === "POST" && url.pathname === "/api/mine") {
       try {
         const body = await request.json();
@@ -256,6 +259,104 @@ Rules:
     return env.ASSETS.fetch(request);
   }
 };
+
+const VET_ESTIMATE_OPTIONS = {
+  petType: new Set(["dog", "cat"]),
+  visitType: new Set(["checkup", "vaccination", "dental", "emergency"]),
+  location: new Set(["metro", "regional"]),
+  state: new Set(["VIC", "NSW", "QLD", "WA", "SA", "TAS", "ACT", "NT"]),
+  ageGroup: new Set(["young", "adult", "senior"])
+};
+
+async function handleVetEstimate(request, env) {
+  try {
+    const input = await request.json();
+    const fields = ["petType", "visitType", "location", "state", "ageGroup"];
+
+    for (const field of fields) {
+      if (!VET_ESTIMATE_OPTIONS[field].has(input?.[field])) {
+        return jsonResponse({ error: `Invalid ${field}` }, 400);
+      }
+    }
+
+    const cacheKey = fields.map(field => input[field]).join(":").toLowerCase();
+    const cached = env.VET_ESTIMATES
+      ? await env.VET_ESTIMATES.get(cacheKey)
+      : null;
+
+    if (cached) {
+      return new Response(cached, {
+        headers: { "Content-Type": "application/json", "X-Cache": "HIT" }
+      });
+    }
+
+    const prompt = `
+Estimate a typical veterinary visit cost range in Australia.
+
+Return JSON only:
+{
+  "min": number,
+  "max": number,
+  "note": "short planning disclaimer",
+  "baseRange": "short description",
+  "adjustments": ["factor"]
+}
+
+Pet: ${input.petType}
+Visit type: ${input.visitType}
+Area: ${input.location}
+State: ${input.state}
+Age group: ${input.ageGroup}
+
+Use Australian-dollar expectations. Keep the explanation concise. This is a planning estimate, not medical or financial advice.
+`;
+
+    const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-mini",
+        temperature: 0.2,
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!aiResponse.ok) {
+      return jsonResponse({ error: "Estimate service unavailable" }, 502);
+    }
+
+    const completion = await aiResponse.json();
+    const content = completion.choices?.[0]?.message?.content;
+    if (!content) return jsonResponse({ error: "No estimate returned" }, 502);
+
+    const estimate = JSON.parse(content);
+    if (!Number.isFinite(estimate.min) || !Number.isFinite(estimate.max) || estimate.min < 0 || estimate.max < estimate.min) {
+      return jsonResponse({ error: "Invalid estimate returned" }, 502);
+    }
+
+    const responseBody = JSON.stringify({
+      min: Math.round(estimate.min),
+      max: Math.round(estimate.max),
+      note: String(estimate.note || "Planning estimate only. Actual clinic pricing may vary."),
+      baseRange: String(estimate.baseRange || "AI-assisted Australian estimate"),
+      adjustments: Array.isArray(estimate.adjustments) ? estimate.adjustments.slice(0, 5).map(String) : []
+    });
+
+    if (env.VET_ESTIMATES) {
+      await env.VET_ESTIMATES.put(cacheKey, responseBody, { expirationTtl: 604800 });
+    }
+
+    return new Response(responseBody, {
+      headers: { "Content-Type": "application/json", "X-Cache": "MISS" }
+    });
+  } catch (error) {
+    return jsonResponse({ error: "Could not calculate estimate" }, 400);
+  }
+}
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
