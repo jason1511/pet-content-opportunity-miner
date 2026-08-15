@@ -1,45 +1,107 @@
 # Pet Growth Platform
 
-An AI-assisted pet growth engineering project that connects internal opportunity research with customer-facing utility tools.
+A growth-engineering portfolio project that combines two distinct pet products in one Cloudflare application:
 
-## Product areas
+1. **Pet Content Opportunity Miner** — an internal research workflow for finding and evaluating pet-search opportunities.
+2. **Australian Pet Vet Cost Estimator** — a customer-facing utility built around a practical pet-owner need.
 
-### Growth workspace
+**[Explore the live Pet Growth Platform](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/)**
 
-- Live search autocomplete signals
-- AI-generated customer questions
-- Strict opportunity scoring and recommendations
-- Structured landing-page briefs
-- Automated output QA
-- Single-keyword and batch workflows
+---
 
-### Customer tools
+## Why these projects live together
 
-- Australian Pet Vet Cost Estimator
-- Input validation and seven-day Cloudflare KV caching
-- Clear planning disclaimer and estimate assumptions
-- Direct navigation between the research and customer experiences
+The products serve different users, but demonstrate two sides of the same growth loop:
 
-The estimator was consolidated from the original [web5](https://github.com/jason1511/web5) prototype. The original repository is retained for history while this project becomes the canonical combined application.
+```mermaid
+flowchart LR
+    A["Discover demand<br/>Opportunity Miner"] --> B["Choose an opportunity"]
+    B --> C["Build customer value<br/>Vet Cost Estimator"]
+    C --> D["Measure usage<br/>Shared analytics"]
+    D --> A
+```
 
-## Architecture
+The miner shows how a growth team can move from search signals to a structured content decision. The estimator shows how a validated need can become a useful public experience. Shared analytics then provides feedback for the next iteration.
 
-The Cloudflare Worker serves static assets and three API workflows:
+## The two products
 
-- `GET /api/autocomplete`
-- `POST /api/questions`
-- `POST /api/mine`
-- `POST /api/estimate`
-- `POST /api/events`
-- `GET /api/analytics`
+| Product | Audience | Purpose | Open it |
+| --- | --- | --- | --- |
+| **Pet Content Opportunity Miner** | Growth, SEO, and content teams | Research keywords, evaluate landing-page potential, and generate production-ready briefs | [Research workspace](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/research.html) |
+| **Australian Pet Vet Cost Estimator** | Australian dog and cat owners | Produce an indicative cost range for common veterinary visits using published price anchors | [Vet cost estimator](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/tools/vet-cost/) |
 
-OpenAI powers question generation and opportunity analysis. Vet-cost ranges are calculated deterministically from published Australian provider prices plus transparent model adjustments. Cloudflare KV caches repeated estimate combinations for seven days.
+### 1. Pet Content Opportunity Miner
 
-## Privacy-conscious analytics
+The research workspace turns a pet-related keyword into an actionable opportunity analysis.
 
-The shared analytics dashboard is available at `/analytics.html`. It records a small allow-list of aggregate product events with an anonymous browser session ID. Raw keywords, email addresses, names, and other personal information are not collected. Events expire after 90 days.
+- Collects live Google autocomplete signals
+- Generates realistic customer questions with OpenAI
+- Scores commercial intent, search intent, page fit, and content depth
+- Recommends what to build—or when not to build
+- Produces landing-page ideas, FAQs, and a structured page brief
+- Runs automated output QA
+- Supports single-keyword and batch analysis
+- Saves recent analyses in the browser
+- Exports individual or complete history as JSON and batch results as CSV
 
-## Local development
+### 2. Australian Pet Vet Cost Estimator
+
+The estimator helps pet owners form a planning range before a common veterinary visit.
+
+- Supports dogs and cats, age groups, Australian states, and area types
+- Covers common appointment categories
+- Calculates prices deterministically rather than asking AI to invent a price
+- Uses published Australian provider prices as source anchors
+- Shows its methodology, assumptions, sources, and data review date
+- Validates inputs and caches repeated estimates in Cloudflare KV for seven days
+
+> Estimates are for planning only. They are not clinic quotes, diagnoses, or medical advice.
+
+## Shared platform features
+
+### Privacy-conscious analytics
+
+The [analytics dashboard](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/analytics.html) measures use across both products.
+
+It stores only an allow-listed set of aggregate product events with an anonymous browser session ID. Raw keywords, names, email addresses, and other personal information are not collected. Events expire after 90 days.
+
+### Application routes
+
+| Route | Experience |
+| --- | --- |
+| `/` | Platform homepage and project selector |
+| `/research.html` | Single-keyword opportunity miner |
+| `/batch.html` | Batch keyword workflow |
+| `/tools/vet-cost/` | Australian vet cost estimator |
+| `/analytics.html` | Shared usage dashboard |
+
+### Worker API
+
+| Method | Endpoint | Responsibility |
+| --- | --- | --- |
+| `GET` | `/api/autocomplete` | Retrieve autocomplete signals |
+| `POST` | `/api/questions` | Generate customer-style questions |
+| `POST` | `/api/mine` | Create and score an opportunity analysis |
+| `POST` | `/api/estimate` | Calculate a source-backed vet cost range |
+| `POST` | `/api/events` | Record an allow-listed anonymous event |
+| `GET` | `/api/analytics` | Return aggregate platform metrics |
+
+## Technology
+
+- Cloudflare Workers and static assets
+- Cloudflare KV for estimate caching and expiring analytics events
+- OpenAI API for question generation and opportunity analysis
+- Vanilla HTML, CSS, and JavaScript
+- Node.js smoke and unit tests
+- GitHub Actions verification on pushes and pull requests
+
+## Run locally
+
+Requirements:
+
+- Node.js 20 or newer
+- A Cloudflare account
+- An OpenAI API key
 
 ```bash
 npm install
@@ -47,7 +109,9 @@ npx wrangler secret put OPENAI_API_KEY
 npm run dev
 ```
 
-Open the local Wrangler URL. The platform homepage is at `/`, the research workspace at `/research.html`, batch analysis at `/batch.html`, and the estimator at `/tools/vet-cost/`.
+Open the local URL printed by Wrangler.
+
+The existing `wrangler.jsonc` contains the deployed KV binding. If you fork the project into another Cloudflare account, create your own KV namespace and replace its IDs before deploying.
 
 ## Quality checks
 
@@ -55,18 +119,21 @@ Open the local Wrangler URL. The platform homepage is at `/`, the research works
 npm run check
 ```
 
-The smoke check verifies all public routes, local links, required assets, Worker API routes, and absence of generated or legacy files.
+This runs route, asset, local-link, API, repository-hygiene, and pricing/analytics logic checks.
 
-## Deployment
+## Deploy
 
 ```bash
 npm run deploy
 ```
 
-## Important limitation
+## Project history
 
-Vet-cost results are indicative planning estimates, not clinic quotes or medical advice. Each result lists its published Australian price anchors, calculation method, model assumptions, and pricing-data review date.
+The vet cost estimator began as the separate [`web5` prototype](https://github.com/jason1511/web5). It was consolidated here so the internal research workflow, customer utility, shared analytics, tests, and deployment could tell one complete growth-engineering story.
+
+This repository is now the canonical home for both products.
 
 ## Author
 
-Jason Leonard — Bachelor of ICT (Software Technology)
+**Jason Leonard**  
+Bachelor of ICT (Software Technology)
