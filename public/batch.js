@@ -164,7 +164,7 @@ function renderBatchResults(items) {
 function renderBatchDetail(item) {
   batchDetailResults.innerHTML = `
     <div class="actions-row">
-      <a class="secondary-btn action-link" href="index.html?keyword=${encodeURIComponent(item.keyword)}">
+      <a class="secondary-btn action-link" href="research.html?keyword=${encodeURIComponent(item.keyword)}">
         Open Full Workflow
       </a>
     </div>

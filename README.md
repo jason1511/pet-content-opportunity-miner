@@ -41,7 +41,7 @@ npx wrangler secret put OPENAI_API_KEY
 npm run cf:dev
 ```
 
-Open the local Wrangler URL. The research workspace is at `/`, batch analysis at `/batch.html`, and the estimator at `/tools/vet-cost/`.
+Open the local Wrangler URL. The platform homepage is at `/`, the research workspace at `/research.html`, batch analysis at `/batch.html`, and the estimator at `/tools/vet-cost/`.
 
 ## Deployment
 
