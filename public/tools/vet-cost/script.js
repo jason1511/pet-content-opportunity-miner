@@ -1,3 +1,5 @@
+import { trackEvent } from "../../analytics-client.js";
+
 const form = document.getElementById("estimatorForm");
 const submitButton = document.getElementById("submitButton");
 const result = document.getElementById("result");
@@ -56,6 +58,12 @@ form.addEventListener("submit", async (event) => {
       item.append(link);
       sourceList.append(item);
     }
+    trackEvent("estimate_completed", {
+      petType: payload.petType,
+      visitType: payload.visitType,
+      state: payload.state,
+      location: payload.location
+    });
   } catch (error) {
     estimateText.textContent = "Estimate unavailable";
     estimateNote.textContent = error.message + ". Please try again.";

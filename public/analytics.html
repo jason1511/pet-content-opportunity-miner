@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Analytics | Pet Growth Platform</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">Pet Growth Platform</a>
+    <nav aria-label="Primary navigation">
+      <a href="index.html">Platform home</a>
+      <a href="research.html">Research</a>
+      <a href="tools/vet-cost/">Estimator</a>
+    </nav>
+  </header>
+  <main>
+    <section class="analytics-hero">
+      <p class="eyebrow">Shared product analytics</p>
+      <h1>How visitors use both projects</h1>
+      <p>Aggregate events connect research usage with estimator usage without storing raw keywords or personal information.</p>
+    </section>
+    <p id="analyticsStatus" class="analytics-status">Loading analytics…</p>
+    <section id="metricGrid" class="metric-grid" aria-live="polite"></section>
+    <section class="analytics-panel">
+      <div>
+        <p class="eyebrow">Cross-project signal</p>
+        <h2>Research-to-utility adoption</h2>
+      </div>
+      <div id="funnelGrid" class="funnel-grid"></div>
+    </section>
+    <section class="analytics-panel">
+      <p class="eyebrow">Recent activity</p>
+      <h2>Events by day</h2>
+      <div id="dailyActivity" class="daily-list"></div>
+    </section>
+  </main>
+  <script type="module" src="analytics-dashboard.js"></script>
+</body>
+</html>

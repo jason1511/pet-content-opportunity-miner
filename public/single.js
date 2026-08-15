@@ -1,4 +1,5 @@
 import { buildResearchSignals } from "./shared.js";
+import { trackEvent } from "./analytics-client.js";
 import {
   clearSavedAnalyses,
   downloadJson,
@@ -103,6 +104,10 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
     }
 
     if (exportLatestBtn) exportLatestBtn.disabled = false;
+    trackEvent("research_completed", {
+      keywordType: researchData.keywordType,
+      scoreBand: Math.min(10, Math.max(0, Math.round(Number(data.opportunity_score || 0))))
+    });
   } catch (error) {
     generationResults.innerHTML = `
       <div class="result-card">

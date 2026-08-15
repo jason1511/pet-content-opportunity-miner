@@ -1,4 +1,9 @@
 import { calculateVetEstimate, validateVetEstimateInput } from "./vet-cost-data.js";
+import {
+  aggregateAnalytics,
+  ANALYTICS_EVENT_TYPES,
+  sanitizeAnalyticsMetadata
+} from "./analytics-core.js";
 
 export default {
   async fetch(request, env) {
@@ -129,6 +134,14 @@ Rules:
     );
   }
 }
+    if (request.method === "POST" && url.pathname === "/api/events") {
+      return handleAnalyticsEvent(request, env);
+    }
+
+    if (request.method === "GET" && url.pathname === "/api/analytics") {
+      return handleAnalyticsSummary(env);
+    }
+
     if (request.method === "POST" && url.pathname === "/api/estimate") {
       return handleVetEstimate(request, env);
     }
@@ -302,6 +315,48 @@ async function handleVetEstimate(request, env) {
   } catch {
     return jsonResponse({ error: "Could not calculate estimate" }, 400);
   }
+}
+
+async function handleAnalyticsEvent(request, env) {
+  try {
+    if (!env.VET_ESTIMATES) return jsonResponse({ error: "Analytics storage unavailable" }, 503);
+    const body = await request.json();
+
+    if (!ANALYTICS_EVENT_TYPES.has(body?.type)) {
+      return jsonResponse({ error: "Invalid event type" }, 400);
+    }
+
+    if (!/^[a-zA-Z0-9-]{8,80}$/.test(body?.sessionId || "")) {
+      return jsonResponse({ error: "Invalid session" }, 400);
+    }
+
+    const event = {
+      type: body.type,
+      sessionId: body.sessionId,
+      timestamp: new Date().toISOString(),
+      metadata: sanitizeAnalyticsMetadata(body.metadata)
+    };
+    const key = `event:${Date.now()}:${crypto.randomUUID()}`;
+    await env.VET_ESTIMATES.put(key, JSON.stringify(event), { expirationTtl: 7776000 });
+    return jsonResponse({ accepted: true }, 202);
+  } catch {
+    return jsonResponse({ error: "Event not recorded" }, 400);
+  }
+}
+
+async function handleAnalyticsSummary(env) {
+  if (!env.VET_ESTIMATES) return jsonResponse({ error: "Analytics storage unavailable" }, 503);
+
+  const listed = await env.VET_ESTIMATES.list({ prefix: "event:", limit: 1000 });
+  const events = (await Promise.all(
+    listed.keys.map(key => env.VET_ESTIMATES.get(key.name, "json"))
+  )).filter(Boolean);
+
+  return jsonResponse({
+    ...aggregateAnalytics(events),
+    isPartial: !listed.list_complete,
+    privacy: "Aggregate product events only; raw keywords and personal information are not collected."
+  });
 }
 
 function jsonResponse(data, status = 200) {

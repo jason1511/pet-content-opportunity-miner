@@ -13,6 +13,7 @@
     <nav aria-label="Primary navigation">
       <a href="#projects">Projects</a>
       <a href="#connection">How they connect</a>
+      <a href="analytics.html">Analytics</a>
       <a href="https://github.com/jason1511/pet-content-opportunity-miner">GitHub</a>
     </nav>
   </header>
@@ -54,8 +55,8 @@
             <li>Structured briefs and output QA</li>
           </ul>
           <div class="card-actions">
-            <a class="card-primary" href="research.html">Open research workspace</a>
-            <a class="card-secondary" href="batch.html">Try batch mode</a>
+            <a class="card-primary" href="research.html" data-analytics-event="homepage_project_opened" data-analytics-project="research">Open research workspace</a>
+            <a class="card-secondary" href="batch.html" data-analytics-event="homepage_project_opened" data-analytics-project="batch">Try batch mode</a>
           </div>
         </article>
 
@@ -77,7 +78,7 @@
             <li>Seven-day result caching</li>
           </ul>
           <div class="card-actions">
-            <a class="card-primary" href="tools/vet-cost/">Try the estimator</a>
+            <a class="card-primary" href="tools/vet-cost/" data-analytics-event="homepage_project_opened" data-analytics-project="estimator">Try the estimator</a>
           </div>
         </article>
       </div>
@@ -105,5 +106,6 @@
     <p><strong>Pet Growth Platform</strong></p>
     <p>Built by Jason Leonard · Bachelor of ICT (Software Technology)</p>
   </footer>
+  <script type="module">import { bindTrackedLinks } from "./analytics-client.js"; bindTrackedLinks();</script>
 </body>
 </html>

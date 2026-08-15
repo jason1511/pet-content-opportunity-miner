@@ -1,4 +1,5 @@
 import { buildResearchSignals } from "./shared.js";
+import { trackEvent } from "./analytics-client.js";
 
 let batchDetailResults;
 let batchKeywordsInput;
@@ -135,6 +136,10 @@ try {
 
   results.sort((a, b) => b.score - a.score);
   latestBatchResults = results;
+  trackEvent("batch_completed", {
+    keywordCount: results.length,
+    successfulCount: results.filter(item => item.score > 0).length
+  });
   if (exportBatchBtn) exportBatchBtn.disabled = results.length === 0;
   renderBatchResults(results);
 if (results.length > 0) {

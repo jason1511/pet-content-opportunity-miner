@@ -30,8 +30,14 @@ The Cloudflare Worker serves static assets and three API workflows:
 - `POST /api/questions`
 - `POST /api/mine`
 - `POST /api/estimate`
+- `POST /api/events`
+- `GET /api/analytics`
 
 OpenAI powers question generation and opportunity analysis. Vet-cost ranges are calculated deterministically from published Australian provider prices plus transparent model adjustments. Cloudflare KV caches repeated estimate combinations for seven days.
+
+## Privacy-conscious analytics
+
+The shared analytics dashboard is available at `/analytics.html`. It records a small allow-list of aggregate product events with an anonymous browser session ID. Raw keywords, email addresses, names, and other personal information are not collected. Events expire after 90 days.
 
 ## Local development
 
