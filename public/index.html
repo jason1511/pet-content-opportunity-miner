@@ -1,111 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pet Content Opportunity Miner</title>
-  <link rel="stylesheet" href="base.css" />
-<link rel="stylesheet" href="single.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Growth Platform | Two Pet-Focused Projects</title>
+  <meta name="description" content="Explore the Pet Content Opportunity Miner and Australian Pet Vet Cost Estimator, two pet-focused growth engineering projects by Jason Leonard.">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
- <main class="container">
-  <section class="hero">
-  <p class="eyebrow">Growth Engineer Demo</p>
-  <h1>Single Keyword Workflow</h1>
-  <p class="subtitle">
-    Deep-dive analysis for one keyword. Generate structured landing page briefs,
-    insights, and QA checks in a single workflow.
-  </p>
-</section>
-  <section class="card nav-card">
-  <div class="page-nav">
-    <a href="index.html" class="nav-link active-nav-link">Single Workflow</a>
-    <a href="batch.html" class="nav-link">Batch Mode</a>
-    <a href="tools/vet-cost/" class="nav-link">Vet Cost Estimator</a>
-  </div>
-</section>
-<section class="card demo-banner">
-  <div>
-    <p class="eyebrow">Instant Demo</p>
-    <h2>See a live example immediately</h2>
-    <p class="subtitle-small">
-      Preview how the system researches a keyword, generates a structured brief,
-      and runs QA checks before you type anything.
-    </p>
-  </div>
-  <button id="loadDemoBtn" class="secondary-btn">Load Demo: dog insurance</button>
-</section>
-<section class="card value-strip">
-  <div class="value-box">
-    <h3>Without this tool</h3>
-    <p>Manual keyword research, unclear content direction, and scattered landing page ideas.</p>
-  </div>
+  <header class="site-header">
+    <a class="brand" href="./">Pet Growth Platform</a>
+    <nav aria-label="Primary navigation">
+      <a href="#projects">Projects</a>
+      <a href="#connection">How they connect</a>
+      <a href="https://github.com/jason1511/pet-content-opportunity-miner">GitHub</a>
+    </nav>
+  </header>
 
-  <div class="value-box">
-    <h3>With this tool</h3>
-    <p>Research signals, structured page briefs, QA checks, and actionable recommendations in one workflow.</p>
-  </div>
-</section>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Growth engineering portfolio</p>
+      <h1>Two pet-focused projects.<br><span>One shared platform.</span></h1>
+      <p class="hero-copy">
+        An internal research workflow for finding growth opportunities, and a
+        customer-facing utility that turns one of those opportunities into a useful experience.
+      </p>
+      <a class="primary-action" href="#projects">Explore both projects</a>
+    </section>
 
-<section class="card">
-  <summary><strong>How This Works</strong></summary>
-  <div class="how-grid">
-    <div class="how-step">
-      <h3>1. Research</h3>
-      <p>Collects autocomplete-style signals, mined questions, and keyword angles.</p>
-    </div>
-    <div class="how-step">
-      <h3>2. Generate</h3>
-      <p>Uses AI to score the keyword, summarize intent, and create a structured landing page brief.</p>
-    </div>
-    <div class="how-step">
-      <h3>3. QA</h3>
-      <p>Runs checks on output quality, structure, CTA strength, and landing page readiness.</p>
-    </div>
-  </div>
-</section>
-  <section class="card">
-    <label for="keyword" class="label">Pet keyword</label>
-    <div class="input-row">
-      <input
-        id="keyword"
-        type="text"
-        placeholder="e.g. dog insurance, cat dental cleaning, puppy anxiety"
-      />
-      <button id="generateBtn">Run Workflow</button>
-    </div>
-    <p class="helper-text">
-      Research → Generation → QA
-    </p>
-  </section>
-  <section class="workflow-bar card">
-    <div class="workflow-step active">1. Research</div>
-    <div class="workflow-step">2. Generation</div>
-    <div class="workflow-step">3. QA</div>
-  </section>
+    <section id="projects" class="projects-section">
+      <div class="section-heading">
+        <p class="eyebrow">Choose a project</p>
+        <h2>What would you like to explore?</h2>
+        <p>Each project has a different audience, purpose, and interface.</p>
+      </div>
 
-  <section class="card">
-    <h2>Research</h2>
-    <div id="researchResults" class="results-placeholder">
-      No research data yet.
-    </div>
-  </section>
+      <div class="project-grid">
+        <article class="project-card research-card">
+          <div class="card-topline">
+            <span class="project-number">01</span>
+            <span class="project-type">Internal growth tool</span>
+          </div>
+          <div class="project-icon" aria-hidden="true">↗</div>
+          <h3>Pet Content Opportunity Miner</h3>
+          <p class="project-summary">
+            Research pet-related search demand, score opportunities, generate structured
+            landing-page briefs, and run automated QA before content production.
+          </p>
+          <ul>
+            <li>Live autocomplete and question signals</li>
+            <li>AI-assisted opportunity scoring</li>
+            <li>Single-keyword and batch workflows</li>
+            <li>Structured briefs and output QA</li>
+          </ul>
+          <div class="card-actions">
+            <a class="card-primary" href="research.html">Open research workspace</a>
+            <a class="card-secondary" href="batch.html">Try batch mode</a>
+          </div>
+        </article>
 
-  <section class="card">
-    <h2>Generation</h2>
-    <div id="generationResults" class="results-placeholder">
-      No generated brief yet.
-    </div>
-  </section>
+        <article class="project-card estimator-card">
+          <div class="card-topline">
+            <span class="project-number">02</span>
+            <span class="project-type">Customer utility</span>
+          </div>
+          <div class="project-icon" aria-hidden="true">$</div>
+          <h3>Australian Pet Vet Cost Estimator</h3>
+          <p class="project-summary">
+            Help dog and cat owners understand an indicative cost range before a
+            common veterinary visit, using a quick and low-friction form.
+          </p>
+          <ul>
+            <li>Australian state and area inputs</li>
+            <li>Common appointment categories</li>
+            <li>Transparent adjustment factors</li>
+            <li>Seven-day result caching</li>
+          </ul>
+          <div class="card-actions">
+            <a class="card-primary" href="tools/vet-cost/">Try the estimator</a>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <section class="card">
-    <h2>QA</h2>
-    <div id="qaResults" class="results-placeholder">
-      No QA checks yet.
-    </div>
-  </section>
-</main>
+    <section id="connection" class="connection-section">
+      <div class="connection-copy">
+        <p class="eyebrow">Why one repository?</p>
+        <h2>They demonstrate both sides of a growth loop.</h2>
+        <p>
+          The miner represents the internal acquisition workflow. The estimator represents
+          a public experience that can be built from a validated customer need. They remain
+          separate projects while sharing one Cloudflare backend and deployment.
+        </p>
+      </div>
+      <ol class="flow-list">
+        <li><span>1</span><div><strong>Discover</strong><p>Find and score pet-search opportunities.</p></div></li>
+        <li><span>2</span><div><strong>Build</strong><p>Turn a promising need into a useful tool.</p></div></li>
+        <li><span>3</span><div><strong>Learn</strong><p>Use customer behaviour to guide the next opportunity.</p></div></li>
+      </ol>
+    </section>
+  </main>
 
-  <script type="module" src="single.js"></script>
+  <footer>
+    <p><strong>Pet Growth Platform</strong></p>
+    <p>Built by Jason Leonard · Bachelor of ICT (Software Technology)</p>
+  </footer>
 </body>
 </html>
