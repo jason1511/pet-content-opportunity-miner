@@ -1,8 +1,19 @@
 import { buildResearchSignals } from "./shared.js";
+import {
+  clearSavedAnalyses,
+  downloadJson,
+  getSavedAnalyses,
+  saveAnalysis
+} from "./history-store.js";
 
 const generateBtn = document.getElementById("generateBtn");
 const keywordInput = document.getElementById("keyword");
 const loadDemoBtn = document.getElementById("loadDemoBtn");
+const exportLatestBtn = document.getElementById("exportLatestBtn");
+const exportHistoryBtn = document.getElementById("exportHistoryBtn");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+const historyResults = document.getElementById("historyResults");
+let latestAnalysis = null;
 
 const researchResults = document.getElementById("researchResults");
 const generationResults = document.getElementById("generationResults");
@@ -32,6 +43,7 @@ if (loadDemoBtn && keywordInput) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+  renderHistory();
   const params = new URLSearchParams(window.location.search);
   const keywordFromUrl = params.get("keyword");
 
@@ -39,11 +51,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   if (keywordInput) {
     keywordInput.value = keyword;
-    await runWorkflow(keyword);
+    await runWorkflow(keyword, { save: Boolean(keywordFromUrl) });
   }
 });
 
-async function runWorkflow(keyword) {
+async function runWorkflow(keyword, { save = true } = {}) {
   generateBtn.disabled = true;
   if (loadDemoBtn) loadDemoBtn.disabled = true;
 
@@ -77,6 +89,20 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
 
     const qaData = runQaChecks(keyword, data);
     renderQa(qaData);
+
+    latestAnalysis = {
+      keyword,
+      research: researchData,
+      analysis: data,
+      qa: qaData
+    };
+
+    if (save) {
+      latestAnalysis = saveAnalysis(latestAnalysis);
+      renderHistory();
+    }
+
+    if (exportLatestBtn) exportLatestBtn.disabled = false;
   } catch (error) {
     generationResults.innerHTML = `
       <div class="result-card">
@@ -359,4 +385,89 @@ function hasActionVerb(text) {
 
   const lowerText = text.toLowerCase();
   return actionWords.some(word => lowerText.includes(word));
+}
+if (exportLatestBtn) {
+  exportLatestBtn.addEventListener("click", () => {
+    if (!latestAnalysis) return;
+    downloadJson(`${slugify(latestAnalysis.keyword)}-analysis.json`, latestAnalysis);
+  });
+}
+
+if (exportHistoryBtn) {
+  exportHistoryBtn.addEventListener("click", () => {
+    downloadJson("pet-content-analysis-history.json", getSavedAnalyses());
+  });
+}
+
+if (clearHistoryBtn) {
+  clearHistoryBtn.addEventListener("click", () => {
+    if (!window.confirm("Clear all saved analyses from this browser?")) return;
+    clearSavedAnalyses();
+    renderHistory();
+  });
+}
+
+function renderHistory() {
+  if (!historyResults) return;
+  const items = getSavedAnalyses();
+  historyResults.replaceChildren();
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "results-placeholder";
+    empty.textContent = "No saved analyses yet. Run a keyword workflow to save one in this browser.";
+    historyResults.append(empty);
+    if (exportHistoryBtn) exportHistoryBtn.disabled = true;
+    if (clearHistoryBtn) clearHistoryBtn.disabled = true;
+    return;
+  }
+
+  if (exportHistoryBtn) exportHistoryBtn.disabled = false;
+  if (clearHistoryBtn) clearHistoryBtn.disabled = false;
+
+  for (const item of items) {
+    const card = document.createElement("article");
+    card.className = "history-item";
+
+    const copy = document.createElement("div");
+    const title = document.createElement("h3");
+    title.textContent = item.keyword;
+    const meta = document.createElement("p");
+    const score = Number(item.analysis?.opportunity_score || 0).toFixed(1);
+    meta.textContent = `${score}/10 · ${new Date(item.savedAt).toLocaleString()}`;
+    copy.append(title, meta);
+
+    const actions = document.createElement("div");
+    actions.className = "history-actions";
+
+    const rerun = document.createElement("button");
+    rerun.type = "button";
+    rerun.className = "secondary-btn";
+    rerun.textContent = "Run again";
+    rerun.addEventListener("click", () => {
+      keywordInput.value = item.keyword;
+      runWorkflow(item.keyword);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    const download = document.createElement("button");
+    download.type = "button";
+    download.className = "secondary-btn";
+    download.textContent = "Download";
+    download.addEventListener("click", () => {
+      downloadJson(`${slugify(item.keyword)}-analysis.json`, item);
+    });
+
+    actions.append(rerun, download);
+    card.append(copy, actions);
+    historyResults.append(card);
+  }
+}
+
+function slugify(value) {
+  return String(value || "pet-keyword")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }

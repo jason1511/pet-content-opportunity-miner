@@ -65,3 +65,15 @@
   box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.12);
   background: #fff8fc;
 }
+.batch-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.batch-result-heading .secondary-btn { width: auto; margin: 0; }
+@media (max-width: 640px) {
+  .batch-result-heading { align-items: stretch; flex-direction: column; }
+  .batch-result-heading .secondary-btn { width: 100%; }
+}

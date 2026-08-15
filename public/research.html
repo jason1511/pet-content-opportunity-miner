@@ -99,11 +99,33 @@
     </div>
   </section>
 
+  <section class="card export-card">
+    <div>
+      <h2>Export Current Analysis</h2>
+      <p class="helper-text">Download the complete research signals, generated brief, score, and QA result.</p>
+    </div>
+    <button id="exportLatestBtn" class="secondary-btn" disabled>Download JSON</button>
+  </section>
+
   <section class="card">
     <h2>QA</h2>
     <div id="qaResults" class="results-placeholder">
       No QA checks yet.
     </div>
+  </section>
+
+  <section class="card">
+    <div class="history-heading">
+      <div>
+        <h2>Saved Analyses</h2>
+        <p class="helper-text">The latest 25 analyses are stored only in this browser.</p>
+      </div>
+      <div class="history-actions">
+        <button id="exportHistoryBtn" class="secondary-btn" disabled>Export All</button>
+        <button id="clearHistoryBtn" class="secondary-btn danger-btn" disabled>Clear</button>
+      </div>
+    </div>
+    <div id="historyResults"></div>
   </section>
 </main>
 

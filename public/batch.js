@@ -5,6 +5,8 @@ let batchKeywordsInput;
 let runBatchBtn;
 let batchResults;
 let loadBatchDemoBtn;
+let exportBatchBtn;
+let latestBatchResults = [];
 
 window.addEventListener("DOMContentLoaded", () => {
   batchDetailResults = document.getElementById("batchDetailResults");
@@ -12,6 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
   runBatchBtn = document.getElementById("runBatchBtn");
   batchResults = document.getElementById("batchResults");
   loadBatchDemoBtn = document.getElementById("loadBatchDemoBtn");
+  exportBatchBtn = document.getElementById("exportBatchBtn");
 
   if (!batchDetailResults || !batchKeywordsInput || !runBatchBtn || !batchResults) {
     console.error("Batch page elements missing", {
@@ -43,6 +46,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     await runBatchWorkflow(keywords);
   });
+
+  if (exportBatchBtn) {
+    exportBatchBtn.addEventListener("click", () => exportBatchCsv(latestBatchResults));
+  }
 
   if (loadBatchDemoBtn) {
     loadBatchDemoBtn.addEventListener("click", async () => {
@@ -127,6 +134,8 @@ try {
   }
 
   results.sort((a, b) => b.score - a.score);
+  latestBatchResults = results;
+  if (exportBatchBtn) exportBatchBtn.disabled = results.length === 0;
   renderBatchResults(results);
 if (results.length > 0) {
   renderBatchDetail(results[0]);
@@ -227,4 +236,30 @@ function attachBatchClickHandlers(items) {
       renderBatchDetail(item);
     });
   });
+}
+function exportBatchCsv(items) {
+  if (!items.length) return;
+  const rows = [
+    ["keyword", "score", "keyword_type", "recommendation", "headline", "cta"],
+    ...items.map(item => [
+      item.keyword,
+      item.score.toFixed(1),
+      item.keywordType,
+      item.recommendation,
+      item.headline,
+      item.cta
+    ])
+  ];
+  const csv = rows.map(row => row.map(csvCell).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "pet-keyword-opportunities.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function csvCell(value) {
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
 }

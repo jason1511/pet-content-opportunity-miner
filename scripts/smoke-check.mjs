@@ -19,6 +19,7 @@ const requiredFiles = [
   "batch.css",
   "batch.js",
   "shared.js",
+  "history-store.js",
   "tools/vet-cost/style.css",
   "tools/vet-cost/script.js"
 ];
