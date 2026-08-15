@@ -5,6 +5,9 @@ const estimateText = document.getElementById("estimateText");
 const estimateNote = document.getElementById("estimateNote");
 const baseCostText = document.getElementById("baseCostText");
 const adjustmentText = document.getElementById("adjustmentText");
+const methodologyText = document.getElementById("methodologyText");
+const dataVersion = document.getElementById("dataVersion");
+const sourceList = document.getElementById("sourceList");
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -39,6 +42,20 @@ form.addEventListener("submit", async (event) => {
     adjustmentText.textContent = estimate.adjustments.length
       ? estimate.adjustments.join(", ")
       : "No major adjustments";
+    methodologyText.textContent = estimate.methodology;
+    dataVersion.textContent = "Pricing data reviewed: " + estimate.dataVersion;
+    sourceList.replaceChildren();
+
+    for (const source of estimate.sources) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = source.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = source.name + " — " + source.price;
+      item.append(link);
+      sourceList.append(item);
+    }
   } catch (error) {
     estimateText.textContent = "Estimate unavailable";
     estimateNote.textContent = error.message + ". Please try again.";

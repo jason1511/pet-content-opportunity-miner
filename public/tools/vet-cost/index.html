@@ -84,7 +84,7 @@
             </select>
           </label>
           <button id="submitButton" type="submit">Estimate cost</button>
-          <p class="microcopy">Indicative planning estimate only. Actual prices depend on the clinic and treatment required.</p>
+          <p class="microcopy">Source-backed planning estimate only. Published prices and model assumptions are shown with every result.</p>
         </form>
 
         <section id="result" class="result-card hidden" aria-live="polite">
@@ -95,6 +95,12 @@
             <div><dt>Basis</dt><dd id="baseCostText"></dd></div>
             <div><dt>Adjustment factors</dt><dd id="adjustmentText"></dd></div>
           </dl>
+          <div class="methodology">
+            <h3>How this estimate was calculated</h3>
+            <p id="methodologyText"></p>
+            <p id="dataVersion"></p>
+            <ul id="sourceList"></ul>
+          </div>
         </section>
       </div>
     </section>

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
-    "check": "node scripts/smoke-check.mjs",
+    "check": "node scripts/smoke-check.mjs && node --test scripts/*.test.mjs",
     "deploy": "wrangler deploy",
     "cf:dev": "wrangler dev",
     "cf:deploy": "wrangler deploy"

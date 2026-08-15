@@ -97,3 +97,14 @@ dd { margin: 0; text-align: right; font-weight: 700; }
   main { padding-top: 30px; }
   .estimator-layout, form { grid-template-columns: 1fr; }
 }
+
+.methodology {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #fbcfe8;
+}
+.methodology h3 { margin: 0 0 8px; font-size: 17px; }
+.methodology p { margin: 6px 0; font-size: 13px; }
+.methodology ul { margin: 12px 0 0; padding-left: 20px; }
+.methodology li { margin: 8px 0; color: #475467; }
+.methodology a { color: #175cd3; font-weight: 650; }

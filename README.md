@@ -31,7 +31,7 @@ The Cloudflare Worker serves static assets and three API workflows:
 - `POST /api/mine`
 - `POST /api/estimate`
 
-OpenAI powers question generation, opportunity analysis, and explanatory cost estimates. Cloudflare KV caches repeated estimate combinations for seven days.
+OpenAI powers question generation and opportunity analysis. Vet-cost ranges are calculated deterministically from published Australian provider prices plus transparent model adjustments. Cloudflare KV caches repeated estimate combinations for seven days.
 
 ## Local development
 
@@ -59,7 +59,7 @@ npm run deploy
 
 ## Important limitation
 
-Vet-cost results are indicative AI-assisted planning estimates, not clinic quotes, medical advice, or a source-backed pricing dataset. Replacing the estimate basis with maintained Australian pricing data is a planned improvement.
+Vet-cost results are indicative planning estimates, not clinic quotes or medical advice. Each result lists its published Australian price anchors, calculation method, model assumptions, and pricing-data review date.
 
 ## Author
 

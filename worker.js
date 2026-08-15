@@ -1,3 +1,5 @@
+import { calculateVetEstimate, validateVetEstimateInput } from "./vet-cost-data.js";
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -260,26 +262,24 @@ Rules:
   }
 };
 
-const VET_ESTIMATE_OPTIONS = {
-  petType: new Set(["dog", "cat"]),
-  visitType: new Set(["checkup", "vaccination", "dental", "emergency"]),
-  location: new Set(["metro", "regional"]),
-  state: new Set(["VIC", "NSW", "QLD", "WA", "SA", "TAS", "ACT", "NT"]),
-  ageGroup: new Set(["young", "adult", "senior"])
-};
-
 async function handleVetEstimate(request, env) {
   try {
     const input = await request.json();
-    const fields = ["petType", "visitType", "location", "state", "ageGroup"];
+    const invalidField = validateVetEstimateInput(input);
 
-    for (const field of fields) {
-      if (!VET_ESTIMATE_OPTIONS[field].has(input?.[field])) {
-        return jsonResponse({ error: `Invalid ${field}` }, 400);
-      }
+    if (invalidField) {
+      return jsonResponse({ error: `Invalid ${invalidField}` }, 400);
     }
 
-    const cacheKey = fields.map(field => input[field]).join(":").toLowerCase();
+    const cacheKey = [
+      "source-backed-v1",
+      input.petType,
+      input.visitType,
+      input.location,
+      input.state,
+      input.ageGroup
+    ].join(":").toLowerCase();
+
     const cached = env.VET_ESTIMATES
       ? await env.VET_ESTIMATES.get(cacheKey)
       : null;
@@ -290,61 +290,7 @@ async function handleVetEstimate(request, env) {
       });
     }
 
-    const prompt = `
-Estimate a typical veterinary visit cost range in Australia.
-
-Return JSON only:
-{
-  "min": number,
-  "max": number,
-  "note": "short planning disclaimer",
-  "baseRange": "short description",
-  "adjustments": ["factor"]
-}
-
-Pet: ${input.petType}
-Visit type: ${input.visitType}
-Area: ${input.location}
-State: ${input.state}
-Age group: ${input.ageGroup}
-
-Use Australian-dollar expectations. Keep the explanation concise. This is a planning estimate, not medical or financial advice.
-`;
-
-    const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1-mini",
-        temperature: 0.2,
-        response_format: { type: "json_object" },
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-
-    if (!aiResponse.ok) {
-      return jsonResponse({ error: "Estimate service unavailable" }, 502);
-    }
-
-    const completion = await aiResponse.json();
-    const content = completion.choices?.[0]?.message?.content;
-    if (!content) return jsonResponse({ error: "No estimate returned" }, 502);
-
-    const estimate = JSON.parse(content);
-    if (!Number.isFinite(estimate.min) || !Number.isFinite(estimate.max) || estimate.min < 0 || estimate.max < estimate.min) {
-      return jsonResponse({ error: "Invalid estimate returned" }, 502);
-    }
-
-    const responseBody = JSON.stringify({
-      min: Math.round(estimate.min),
-      max: Math.round(estimate.max),
-      note: String(estimate.note || "Planning estimate only. Actual clinic pricing may vary."),
-      baseRange: String(estimate.baseRange || "AI-assisted Australian estimate"),
-      adjustments: Array.isArray(estimate.adjustments) ? estimate.adjustments.slice(0, 5).map(String) : []
-    });
+    const responseBody = JSON.stringify(calculateVetEstimate(input));
 
     if (env.VET_ESTIMATES) {
       await env.VET_ESTIMATES.put(cacheKey, responseBody, { expirationTtl: 604800 });
@@ -353,7 +299,7 @@ Use Australian-dollar expectations. Keep the explanation concise. This is a plan
     return new Response(responseBody, {
       headers: { "Content-Type": "application/json", "X-Cache": "MISS" }
     });
-  } catch (error) {
+  } catch {
     return jsonResponse({ error: "Could not calculate estimate" }, 400);
   }
 }

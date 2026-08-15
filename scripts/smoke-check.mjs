@@ -97,6 +97,13 @@ for (const page of pages) {
 }
 
 const worker = await readFile(path.join(root, "worker.js"), "utf8");
+const pricingData = await readFile(path.join(root, "vet-cost-data.js"), "utf8");
+if (!worker.includes('from "./vet-cost-data.js"')) {
+  failures.push("Worker is not using the deterministic vet-cost data module");
+}
+if (!pricingData.includes("VET_COST_BASELINES")) {
+  failures.push("Vet-cost baseline data is missing");
+}
 for (const route of ["/api/autocomplete", "/api/questions", "/api/mine", "/api/estimate"]) {
   if (!worker.includes(route)) failures.push(`Worker route missing: ${route}`);
 }
