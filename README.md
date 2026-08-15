@@ -38,15 +38,23 @@ OpenAI powers question generation, opportunity analysis, and explanatory cost es
 ```bash
 npm install
 npx wrangler secret put OPENAI_API_KEY
-npm run cf:dev
+npm run dev
 ```
 
 Open the local Wrangler URL. The platform homepage is at `/`, the research workspace at `/research.html`, batch analysis at `/batch.html`, and the estimator at `/tools/vet-cost/`.
 
+## Quality checks
+
+```bash
+npm run check
+```
+
+The smoke check verifies all public routes, local links, required assets, Worker API routes, and absence of generated or legacy files.
+
 ## Deployment
 
 ```bash
-npm run cf:deploy
+npm run deploy
 ```
 
 ## Important limitation

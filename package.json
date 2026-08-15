@@ -1,17 +1,17 @@
 {
-  "name": "pet-content-opportunity-miner",
+  "name": "pet-growth-platform",
   "version": "1.0.0",
-  "description": "AI-assisted SEO keyword mining tool for pet content",
+  "description": "Pet growth research workflows and customer-facing utility tools on Cloudflare Workers.",
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "wrangler dev",
+    "check": "node scripts/smoke-check.mjs",
+    "deploy": "wrangler deploy",
     "cf:dev": "wrangler dev",
     "cf:deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0",
-    "openai": "^4.56.0"
+  "engines": {
+    "node": ">=20"
   },
   "devDependencies": {
     "wrangler": "^4.76.0"
