@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australian Pet Vet Cost Estimator</title>
+  <meta name="description" content="Estimate common Australian vet visit costs for dogs and cats.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../index.html">Pet Growth Platform</a>
+    <nav aria-label="Primary navigation">
+      <a href="../../index.html">Research workspace</a>
+      <a href="../../batch.html">Batch analysis</a>
+      <a class="active" href="./">Vet cost estimator</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Customer utility</p>
+      <h1>Plan for your pet's next vet visit</h1>
+      <p>Choose a few details to receive an indicative Australian cost range. No signup required.</p>
+    </section>
+
+    <section class="estimator-layout" id="estimator">
+      <div class="context-card">
+        <p class="eyebrow">From insight to utility</p>
+        <h2>A customer-facing growth experiment</h2>
+        <p>This tool complements the research workspace: pet search opportunities can become useful interactive experiences rather than static content alone.</p>
+        <ul>
+          <li>Australian states and territories</li>
+          <li>Common dog and cat appointments</li>
+          <li>Clear assumptions and adjustment factors</li>
+        </ul>
+      </div>
+
+      <div class="estimator-card">
+        <form id="estimatorForm">
+          <label>Pet type
+            <select id="petType" required>
+              <option value="">Select one</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+            </select>
+          </label>
+          <label>Visit type
+            <select id="visitType" required>
+              <option value="">Select one</option>
+              <option value="checkup">Check-up</option>
+              <option value="vaccination">Vaccination</option>
+              <option value="dental">Dental</option>
+              <option value="emergency">Emergency</option>
+            </select>
+          </label>
+          <label>Area
+            <select id="location" required>
+              <option value="">Select one</option>
+              <option value="metro">Metro</option>
+              <option value="regional">Regional</option>
+            </select>
+          </label>
+          <label>State or territory
+            <select id="state" required>
+              <option value="">Select one</option>
+              <option value="VIC">Victoria</option>
+              <option value="NSW">New South Wales</option>
+              <option value="QLD">Queensland</option>
+              <option value="WA">Western Australia</option>
+              <option value="SA">South Australia</option>
+              <option value="TAS">Tasmania</option>
+              <option value="ACT">Australian Capital Territory</option>
+              <option value="NT">Northern Territory</option>
+            </select>
+          </label>
+          <label>Age group
+            <select id="ageGroup" required>
+              <option value="">Select one</option>
+              <option value="young">Puppy or kitten</option>
+              <option value="adult">Adult</option>
+              <option value="senior">Senior</option>
+            </select>
+          </label>
+          <button id="submitButton" type="submit">Estimate cost</button>
+          <p class="microcopy">Indicative planning estimate only. Actual prices depend on the clinic and treatment required.</p>
+        </form>
+
+        <section id="result" class="result-card hidden" aria-live="polite">
+          <p class="eyebrow">Estimated range</p>
+          <h2 id="estimateText"></h2>
+          <p id="estimateNote"></p>
+          <dl>
+            <div><dt>Basis</dt><dd id="baseCostText"></dd></div>
+            <div><dt>Adjustment factors</dt><dd id="adjustmentText"></dd></div>
+          </dl>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

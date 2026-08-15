@@ -1,134 +1,58 @@
-﻿
-Generated output includes:
+# Pet Growth Platform
 
-- Intent explanation
-- 5 user questions
-- 5 landing page angles
-- 5 FAQ schema questions
-- Landing page structure (headline, sections, CTA)
+An AI-assisted pet growth engineering project that connects internal opportunity research with customer-facing utility tools.
 
-This helps quickly transform a **single keyword into a usable SEO content plan**.
+## Product areas
 
----
+### Growth workspace
 
-# Why This Project Exists
+- Live search autocomplete signals
+- AI-generated customer questions
+- Strict opportunity scoring and recommendations
+- Structured landing-page briefs
+- Automated output QA
+- Single-keyword and batch workflows
 
-Growth teams often need to quickly determine:
+### Customer tools
 
-- Is this keyword worth building a landing page for?
-- What questions do users actually have?
-- What content structure would rank well?
-- What FAQ schema could capture featured snippets?
+- Australian Pet Vet Cost Estimator
+- Input validation and seven-day Cloudflare KV caching
+- Clear planning disclaimer and estimate assumptions
+- Direct navigation between the research and customer experiences
 
-Instead of manually researching and planning content, this tool generates a **structured SEO brief in seconds**.
+The estimator was consolidated from the original [web5](https://github.com/jason1511/web5) prototype. The original repository is retained for history while this project becomes the canonical combined application.
 
-This simulates the kind of **internal productivity tools growth engineers build for marketing teams**.
+## Architecture
 
----
+The Cloudflare Worker serves static assets and three API workflows:
 
-# Tech Stack
+- `GET /api/autocomplete`
+- `POST /api/questions`
+- `POST /api/mine`
+- `POST /api/estimate`
 
-Frontend
-- HTML
-- CSS
-- Vanilla JavaScript
+OpenAI powers question generation, opportunity analysis, and explanatory cost estimates. Cloudflare KV caches repeated estimate combinations for seven days.
 
-Backend
-- Cloudflare Workers
+## Local development
 
-AI
-- OpenAI API
-
-Deployment
-- Cloudflare Workers
-- Wrangler CLI
-
----
-
-# Architecture
-User Input (keyword)
-│
-▼
-Frontend (HTML + JS)
-│
-▼
-POST /api/mine
-│
-▼
-Cloudflare Worker
-│
-▼
-OpenAI API
-│
-▼
-Structured JSON Response
-│
-▼
-Rendered SEO Strategy
-
-The Worker handles the API call and returns structured JSON which is rendered into readable sections on the page.
-
----
-
-# Running Locally
-
-Clone the repository:
-git clone https://github.com/jason1511/pet-content-opportunity-miner.git
-
-cd pet-content-opportunity-miner
-
-Install dependencies:
+```bash
 npm install
-
-Create a `.env` file:
-OPENAI_API_KEY=your_api_key_here
-
-Run locally:
-npm run dev
-
-Open:
-http://localhost:3000/
-
----
-
-# Deploying
-
-This project is deployed using **Cloudflare Workers**.
-
-Deploy with Wrangler:
-npx wrangler deploy
-
-
-Environment secrets are stored using:
 npx wrangler secret put OPENAI_API_KEY
+npm run cf:dev
+```
 
+Open the local Wrangler URL. The research workspace is at `/`, batch analysis at `/batch.html`, and the estimator at `/tools/vet-cost/`.
 
----
+## Deployment
 
-# Future Improvements
+```bash
+npm run cf:deploy
+```
 
-Possible upgrades:
+## Important limitation
 
-- Opportunity scoring system for keywords
-- SEO difficulty estimation
-- Content gap detection
-- FAQ schema export
-- Copy-to-CMS button
-- Keyword history tracking
+Vet-cost results are indicative AI-assisted planning estimates, not clinic quotes, medical advice, or a source-backed pricing dataset. Replacing the estimate basis with maintained Australian pricing data is a planned improvement.
 
----
+## Author
 
-# Author
-
-Jason Leonard  
-Bachelor of ICT (Software Technology)
-
-GitHub:  
-https://github.com/jason1511
-
----
-
-# License
-
-
-MIT
+Jason Leonard — Bachelor of ICT (Software Technology)

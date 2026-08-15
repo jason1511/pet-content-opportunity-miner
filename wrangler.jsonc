@@ -2,9 +2,18 @@
   "name": "pet-content-opportunity-miner",
   "main": "worker.js",
   "compatibility_date": "2025-09-23",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "VET_ESTIMATES",
+      "id": "ae5c0ecdac754b64abe096844834cb3b",
+      "preview_id": "9ea9ea83587e40a5ae358c4e6c25b2bb"
+    }
+  ]
 }
