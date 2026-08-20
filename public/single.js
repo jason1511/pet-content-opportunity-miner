@@ -138,6 +138,7 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
 }
 
 function renderResearch(data) {
+  const metrics = data.signalMetrics || {};
   researchResults.innerHTML = `
     <div class="result-card">
       <h3>Keyword Summary</h3>
@@ -145,6 +146,20 @@ function renderResearch(data) {
       <p><strong>Keyword Type:</strong> ${data.keywordType}</p>
       <p><strong>Autocomplete Source:</strong> ${data.sourceMeta.autocompleteSource}</p>
       <p><strong>Question Source:</strong> ${data.sourceMeta.questionSource}</p>
+      <p><strong>Collected:</strong> ${new Date(data.collectedAt).toLocaleString()}</p>
+    </div>
+
+    <div class="result-card signal-grid-card">
+      <h3>Transparent Signal Indicators</h3>
+      <div class="signal-grid">
+        ${renderSignal("Demand proxy", metrics.demandProxy)}
+        ${renderSignal("Competition proxy", metrics.competitionProxy)}
+        ${renderSignal("Commercial intent", `${metrics.commercialIntent}/10`)}
+        ${renderSignal("Intent clarity", `${metrics.intentClarity}/10`)}
+        ${renderSignal("Landing-page fit", `${metrics.landingPageFit}/10`)}
+        ${renderSignal("Content depth", `${metrics.contentDepth}/10`)}
+      </div>
+      <p class="helper-text">${metrics.caveat || "These are directional research indicators."}</p>
     </div>
 
     <div class="result-card">
@@ -167,18 +182,40 @@ function renderResearch(data) {
         ${data.contentAngles.map(item => `<li>${item}</li>`).join("")}
       </ul>
     </div>
+
+    <div class="result-card">
+      <h3>Sources and collection method</h3>
+      <ul>
+        ${(data.sources || []).map(source => `<li><a href="${source.url}" target="_blank" rel="noreferrer">${source.name}</a> — ${source.method}</li>`).join("")}
+      </ul>
+    </div>
   `;
+}
+
+function renderSignal(label, value) {
+  return `<div><span>${label}</span><strong>${value ?? "Not available"}</strong></div>`;
 }
 
 function renderGeneration(data) {
   const score = Number(data.opportunity_score || 0).toFixed(1);
   const estimatorLink = buildEstimatorLink(keywordInput?.value || "");
+  const breakdown = data.score_breakdown || {};
 
   generationResults.innerHTML = `
     <div class="score-card">
       <h2>Opportunity Score</h2>
       <div class="score">${score}/10</div>
       <p>${data.score_reason}</p>
+    </div>
+
+    <div class="result-card">
+      <h3>AI Score Breakdown</h3>
+      <div class="signal-grid">
+        ${renderSignal("Commercial intent", formatScore(breakdown.commercial_intent))}
+        ${renderSignal("Intent clarity", formatScore(breakdown.intent_clarity))}
+        ${renderSignal("Landing-page fit", formatScore(breakdown.landing_page_fit))}
+        ${renderSignal("Content depth", formatScore(breakdown.content_depth))}
+      </div>
     </div>
 
     <div class="result-card">
@@ -246,6 +283,11 @@ function renderGeneration(data) {
       <a class="secondary-btn action-link" href="${estimatorLink}">Open the resulting customer tool</a>
     </div>
   `;
+}
+
+function formatScore(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? `${number.toFixed(1)}/10` : "Not returned";
 }
 
 function buildEstimatorLink(keyword) {

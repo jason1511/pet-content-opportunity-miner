@@ -143,6 +143,20 @@
 .history-actions .secondary-btn { width: auto; margin: 0; }
 .danger-btn { background: #991b1b; }
 .connection-callout, .product-bridge-card { border-left: 4px solid var(--accent, #2e7d55); }
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.signal-grid > div {
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f8faf9;
+}
+.signal-grid span, .signal-grid strong { display: block; }
+.signal-grid span { margin-bottom: 0.25rem; color: var(--muted); font-size: 0.8rem; }
 .connection-callout {
   display: flex;
   align-items: center;

@@ -113,6 +113,8 @@ try {
   score: Number(data.opportunity_score || 0),
   recommendation: data.recommendation || "No recommendation returned.",
   keywordType: researchData.keywordType,
+  demandProxy: researchData.signalMetrics?.demandProxy || "Unverified",
+  commercialIntent: Number(researchData.signalMetrics?.commercialIntent || 0),
   scoreReason: data.score_reason || "No score reason returned.",
   insightSummary: data.insight_summary || "No insight summary returned.",
   riskFlags: Array.isArray(data.risk_flags) ? data.risk_flags : [],
@@ -126,6 +128,8 @@ try {
         score: 0,
         recommendation: `Batch analysis failed: ${error.message}`,
         keywordType: "Unknown",
+        demandProxy: "Unverified",
+        commercialIntent: 0,
         scoreReason: "No score available due to an error."
       });
     }
@@ -162,6 +166,7 @@ function renderBatchResults(items) {
         <div class="batch-item clickable" data-keyword="${item.keyword}">
           <h3>${item.keyword}</h3>
           <p class="batch-meta"><strong>Keyword Type:</strong> ${item.keywordType}</p>
+          <p class="batch-meta"><strong>Demand proxy:</strong> ${item.demandProxy} · <strong>Commercial intent:</strong> ${item.commercialIntent.toFixed(1)}/10</p>
           <p class="batch-meta"><strong>Why it scored this way:</strong> ${item.scoreReason}</p>
           <p class="batch-meta"><strong>Recommendation:</strong> ${item.recommendation}</p>
           <span class="batch-score">Opportunity Score: ${item.score.toFixed(1)}/10</span>
@@ -194,6 +199,8 @@ function renderBatchDetail(item) {
     <div class="result-card">
       <h3>Keyword Type</h3>
       <p>${item.keywordType}</p>
+      <p><strong>Demand proxy:</strong> ${item.demandProxy}</p>
+      <p><strong>Commercial intent:</strong> ${item.commercialIntent.toFixed(1)}/10</p>
     </div>
 
     <div class="result-card">
@@ -242,11 +249,13 @@ function attachBatchClickHandlers(items) {
 function exportBatchCsv(items) {
   if (!items.length) return;
   const rows = [
-    ["keyword", "score", "keyword_type", "recommendation", "headline", "cta"],
+    ["keyword", "score", "keyword_type", "demand_proxy", "commercial_intent", "recommendation", "headline", "cta"],
     ...items.map(item => [
       item.keyword,
       item.score.toFixed(1),
       item.keywordType,
+      item.demandProxy,
+      item.commercialIntent.toFixed(1),
       item.recommendation,
       item.headline,
       item.cta

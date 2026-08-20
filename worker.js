@@ -204,6 +204,12 @@ Return ONLY valid JSON in this structure:
 {
   "opportunity_score": 5.0,
   "score_reason": "Short explanation.",
+  "score_breakdown": {
+    "commercial_intent": 5.0,
+    "intent_clarity": 5.0,
+    "landing_page_fit": 5.0,
+    "content_depth": 5.0
+  },
   "insight_summary": "2-3 sentence summary of what makes this keyword promising or weak.",
   "recommendation": "A direct recommendation for what type of page or action should be taken.",
   "risk_flags": [
@@ -240,6 +246,7 @@ Rules:
 - Be strict. Do not inflate scores.
 - Use the research signals to shape the response.
 - insight_summary must be specific and sound like a real analyst observation.
+- score_breakdown values must each be numbers from 1 to 10 and must reflect the supplied signal metrics.
 - recommendation must clearly say what page to build or what not to build.
 - risk_flags must contain exactly 3 concise items.
 - faq_schema must contain exactly 5 objects.
