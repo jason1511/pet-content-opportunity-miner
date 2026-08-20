@@ -148,6 +148,11 @@ if (!batchScript.includes("research.html?keyword=")) {
   failures.push("Batch details do not deep-link to the research workflow");
 }
 
+const shareStyles = await readFile(path.join(publicRoot, "share.css"), "utf8");
+if (!shareStyles.includes('@media print') || !shareStyles.includes(':root[data-theme="dark"]') || !shareStyles.includes("platform-nav { display: none; }")) {
+  failures.push("Shared reports are missing theme-independent print styles");
+}
+
 if (failures.length) {
   console.error("Smoke checks failed:");
   for (const failure of failures) console.error(`- ${failure}`);

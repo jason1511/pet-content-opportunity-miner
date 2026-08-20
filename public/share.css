@@ -14,9 +14,32 @@
 .hidden { display: none; }
 @media (max-width: 680px) { .report-grid { grid-template-columns: 1fr 1fr; } }
 @media print {
-  body { background: #fff; }
+  @page { margin: 16mm; }
+  :root,
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --page-bg: #ffffff;
+    --surface: #ffffff;
+    --surface-subtle: #f3f4f6;
+    --surface-raised: #ffffff;
+    --text: #111827;
+    --ink: #111827;
+    --text-soft: #374151;
+    --muted: #4b5563;
+    --border: #d1d5db;
+    --border-strong: #9ca3af;
+    --accent: #9d174d;
+    --shadow: none;
+  }
+  body {
+    background: var(--page-bg);
+    color: var(--text);
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  platform-nav { display: none; }
   .report-shell { max-width: none; padding: 0; }
   .report-nav { display: none; }
-  .card { box-shadow: none; break-inside: avoid; }
+  .card { background: var(--surface); border-color: var(--border); box-shadow: none; break-inside: avoid; }
   .report-header { padding-top: 0; }
 }
