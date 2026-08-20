@@ -60,6 +60,8 @@
               <option value="vaccination">Vaccination</option>
               <option value="dental">Dental</option>
               <option value="emergency">Emergency</option>
+              <option value="microchip">Microchipping</option>
+              <option value="desexing">Desexing</option>
             </select>
           </label>
           <label>Area
@@ -90,6 +92,10 @@
               <option value="senior">Senior</option>
             </select>
           </label>
+          <label>Postcode
+            <input id="postcode" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="e.g. 3000" required>
+            <span class="field-help">Used to suggest metro or regional pricing. You can still adjust the area manually.</span>
+          </label>
           <button id="submitButton" type="submit">Estimate cost</button>
           <p class="microcopy">Source-backed planning estimate only. Published prices and model assumptions are shown with every result.</p>
         </form>
@@ -101,13 +107,19 @@
           <dl>
             <div><dt>Basis</dt><dd id="baseCostText"></dd></div>
             <div><dt>Adjustment factors</dt><dd id="adjustmentText"></dd></div>
+            <div><dt>Postcode classification</dt><dd id="locationResolutionText"></dd></div>
           </dl>
+          <div class="area-comparison">
+            <h3>Metro and regional comparison</h3>
+            <div id="areaComparison"></div>
+          </div>
           <div class="methodology">
             <h3>How this estimate was calculated</h3>
             <p id="methodologyText"></p>
             <p id="dataVersion"></p>
             <ul id="sourceList"></ul>
           </div>
+          <a id="nearbyClinicLink" class="clinic-link" target="_blank" rel="noreferrer">Find nearby veterinary clinics</a>
         </section>
       </div>
     </section>

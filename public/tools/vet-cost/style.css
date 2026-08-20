@@ -69,6 +69,14 @@ select, button {
   font: inherit;
 }
 select { padding: 0 12px; background: white; border: 1px solid #d0d5dd; color: var(--ink); }
+input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 11px;
+  font: inherit;
+}
 button {
   grid-column: 1 / -1;
   border: 0;
@@ -79,6 +87,7 @@ button {
 }
 button:disabled { cursor: wait; opacity: .65; }
 .microcopy { grid-column: 1 / -1; margin: -4px 0 0; font-size: 12px; }
+.field-help { color: #667085; font-size: 12px; font-weight: 400; }
 .result-card {
   margin-top: 24px;
   padding: 22px;
@@ -104,6 +113,10 @@ dd { margin: 0; text-align: right; font-weight: 700; }
 }
 
 .research-origin h2 { margin: 0.25rem 0 0.5rem; }
+.area-comparison { margin-top: 1rem; padding: 1rem; border-radius: 12px; background: #fff; }
+.area-comparison h3 { margin: 0 0 0.5rem; }
+.area-comparison p { margin: 0.35rem 0; }
+.clinic-link { display: inline-block; margin-top: 1rem; font-weight: 700; color: #175cd3; }
 @media (max-width: 760px) {
   .site-header { align-items: flex-start; flex-direction: column; }
   main { padding-top: 30px; }

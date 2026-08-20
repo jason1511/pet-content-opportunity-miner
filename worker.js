@@ -340,7 +340,8 @@ async function handleVetEstimate(request, env) {
       input.visitType,
       input.location,
       input.state,
-      input.ageGroup
+      input.ageGroup,
+      input.postcode || "no-postcode"
     ].join(":").toLowerCase();
 
     const cached = env.VET_ESTIMATES
