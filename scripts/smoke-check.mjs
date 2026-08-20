@@ -113,6 +113,7 @@ for (const page of pages) {
 for (const page of pages) {
   const html = await readFile(path.join(publicRoot, page), "utf8");
   if (!html.includes("<platform-nav")) failures.push(`Shared navigation missing from public/${page}`);
+  if (!html.includes('id="main-content"')) failures.push(`Skip-link target missing from public/${page}`);
 }
 
 const worker = await readFile(path.join(root, "worker.js"), "utf8");
@@ -138,6 +139,9 @@ if (!platformNavigation.includes('aria-expanded="false"') || !platformNavigation
 }
 if (!platformNavigation.includes("createThemeControl")) {
   failures.push("Shared navigation is missing the theme control");
+}
+if (!platformNavigation.includes("Skip to main content") || !platformNavigation.includes("pointerdown")) {
+  failures.push("Shared navigation is missing keyboard or dismissible-menu support");
 }
 if (!research.includes("dog%20dental%20cleaning%20cost")) {
   failures.push("Research page is missing the connected vet-cost example");
