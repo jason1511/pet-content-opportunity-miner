@@ -9,15 +9,7 @@
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="./">Pet Growth Platform</a>
-    <nav aria-label="Primary navigation">
-      <a href="#projects">Projects</a>
-      <a href="#connection">How they connect</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="https://github.com/jason1511/pet-content-opportunity-miner">GitHub</a>
-    </nav>
-  </header>
+  <platform-nav current="home" root="./"></platform-nav>
 
   <main>
     <section class="hero">
@@ -108,6 +100,7 @@
     <p><strong>Pet Growth Platform</strong></p>
     <p>Built by Jason Leonard · Bachelor of ICT (Software Technology)</p>
   </footer>
+  <script type="module" src="platform-nav.js"></script>
   <script type="module">import { bindTrackedLinks } from "./analytics-client.js"; bindTrackedLinks();</script>
 </body>
 </html>

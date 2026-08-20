@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="batch.css" />
 </head>
 <body>
+  <platform-nav current="batch" root="./"></platform-nav>
   <main class="container">
     <section class="hero">
       <p class="eyebrow">Growth Engineer Demo</p>
@@ -19,14 +20,6 @@
       </p>
     </section>
 
-    <section class="card nav-card">
-      <div class="page-nav">
-        <a href="index.html" class="nav-link">Platform Home</a>
-        <a href="research.html" class="nav-link">Single Workflow</a>
-        <a href="batch.html" class="nav-link active-nav-link">Batch Mode</a>
-        <a href="tools/vet-cost/" class="nav-link">Vet Cost Estimator</a>
-      </div>
-    </section>
     <section class="card demo-banner">
   <div>
     <p class="eyebrow">Instant Demo</p>
@@ -75,6 +68,7 @@
     </section>
   </main>
 
+  <script type="module" src="platform-nav.js"></script>
   <script type="module" src="batch.js"></script>
 </body>
 </html>

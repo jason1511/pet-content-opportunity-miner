@@ -9,15 +9,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="../../index.html">Pet Growth Platform</a>
-    <nav aria-label="Primary navigation">
-      <a href="../../index.html">Platform home</a>
-      <a href="../../research.html">Research workspace</a>
-      <a href="../../batch.html">Batch analysis</a>
-      <a class="active" href="./">Vet cost estimator</a>
-    </nav>
-  </header>
+  <platform-nav current="estimator" root="../../"></platform-nav>
 
   <main>
     <section class="hero">
@@ -125,6 +117,7 @@
       </div>
     </section>
   </main>
+  <script type="module" src="../../platform-nav.js"></script>
   <script type="module" src="script.js"></script>
 </body>
 </html>

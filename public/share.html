@@ -10,11 +10,9 @@
   <link rel="stylesheet" href="share.css" />
 </head>
 <body>
+  <platform-nav root="./"></platform-nav>
   <main class="container report-shell">
-    <nav class="report-nav">
-      <a href="index.html">Pet Growth Platform</a>
-      <button id="printReport" type="button">Print / Save PDF</button>
-    </nav>
+    <div class="report-nav"><span>Shared opportunity report</span><button id="printReport" type="button">Print / Save PDF</button></div>
     <header class="report-header">
       <p class="eyebrow">Opportunity report</p>
       <h1 id="reportTitle">Loading report…</h1>
@@ -31,6 +29,7 @@
       <section class="card report-footnote"><p>This report contains directional research proxies and AI-assisted analysis. It does not claim measured search volume or keyword difficulty.</p></section>
     </article>
   </main>
+  <script type="module" src="platform-nav.js"></script>
   <script type="module" src="share.js"></script>
 </body>
 </html>

@@ -9,14 +9,7 @@
   <link rel="stylesheet" href="analytics.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="./">Pet Growth Platform</a>
-    <nav aria-label="Primary navigation">
-      <a href="index.html">Platform home</a>
-      <a href="research.html">Research</a>
-      <a href="tools/vet-cost/">Estimator</a>
-    </nav>
-  </header>
+  <platform-nav current="analytics" root="./"></platform-nav>
   <main>
     <section class="analytics-hero">
       <p class="eyebrow">Shared product analytics</p>
@@ -54,6 +47,7 @@
       </section>
     </div>
   </main>
+  <script type="module" src="platform-nav.js"></script>
   <script type="module" src="analytics-dashboard.js"></script>
 </body>
 </html>

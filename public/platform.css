@@ -85,6 +85,55 @@ img, svg { max-width: 100%; }
 .platform-button-secondary { color: var(--text); background: var(--surface); border-color: var(--border); }
 .platform-button-secondary:hover { background: var(--surface-subtle); }
 
+platform-nav { display: block; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.platform-header {
+  width: min(100% - 40px, var(--content-width));
+  min-height: 72px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+}
+.platform-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--text);
+  font-size: 0.96rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.platform-brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: white;
+  background: var(--platform);
+  font-weight: 900;
+}
+.platform-nav-links, .platform-nav-actions { display: flex; align-items: center; gap: 0.35rem; }
+.platform-nav-links a, .platform-nav-actions a {
+  padding: 0.55rem 0.7rem;
+  border-radius: 9px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 720;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.platform-nav-links a:hover, .platform-nav-actions a:hover { color: var(--text); background: var(--surface-subtle); }
+.platform-nav-links a[aria-current="page"], .platform-nav-actions a[aria-current="page"] {
+  color: var(--platform-strong);
+  background: var(--platform-soft);
+}
+.platform-admin-link { border: 1px solid var(--border); }
+.platform-github-link { color: var(--text-soft) !important; }
+
 .visually-hidden {
   position: absolute;
   width: 1px;

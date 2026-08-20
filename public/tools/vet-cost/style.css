@@ -5,26 +5,6 @@ body {
   color: var(--ink);
   background: #f8fafc;
 }
-.site-header {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.brand { color: var(--ink); font-weight: 800; text-decoration: none; }
-nav { display: flex; flex-wrap: wrap; gap: 8px; }
-nav a {
-  color: #475467;
-  padding: 9px 12px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 650;
-  font-size: 14px;
-}
-nav a:hover, nav a.active { color: var(--accent); background: var(--accent-soft); }
 main { max-width: 1120px; margin: 0 auto; padding: 52px 24px 80px; }
 .hero { max-width: 720px; margin-bottom: 36px; }
 .eyebrow {
@@ -109,7 +89,6 @@ dd { margin: 0; text-align: right; font-weight: 700; }
 .area-comparison p { margin: 0.35rem 0; }
 .clinic-link { display: inline-block; margin-top: 1rem; font-weight: 700; color: #175cd3; }
 @media (max-width: 760px) {
-  .site-header { align-items: flex-start; flex-direction: column; }
   main { padding-top: 30px; }
   .estimator-layout, form { grid-template-columns: 1fr; }
 }

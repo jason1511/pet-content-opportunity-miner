@@ -16,6 +16,7 @@ const requiredFiles = [
   ...pages,
   "home.css",
   "platform.css",
+  "platform-nav.js",
   "base.css",
   "single.css",
   "single.js",
@@ -105,6 +106,11 @@ for (const page of pages) {
       failures.push(`Broken local reference in public/${page}: ${reference}`);
     }
   }
+}
+
+for (const page of pages) {
+  const html = await readFile(path.join(publicRoot, page), "utf8");
+  if (!html.includes("<platform-nav")) failures.push(`Shared navigation missing from public/${page}`);
 }
 
 const worker = await readFile(path.join(root, "worker.js"), "utf8");
