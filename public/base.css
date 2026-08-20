@@ -21,6 +21,25 @@ body {
   color: var(--text);
 }
 
+.service-status {
+  width: fit-content;
+  margin: 0 0 1rem auto;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #b8d8c0;
+  border-radius: 999px;
+  background: #edf8f0;
+  color: #25623a;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.service-status-degraded,
+.service-status-offline {
+  border-color: #efd18c;
+  background: #fff8e7;
+  color: #775612;
+}
+
 .container {
   max-width: 980px;
   margin: 0 auto;

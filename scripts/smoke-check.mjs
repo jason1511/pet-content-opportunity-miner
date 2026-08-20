@@ -21,6 +21,7 @@ const requiredFiles = [
   "batch.js",
   "shared.js",
   "api-security.js",
+  "service-status.js",
   "history-store.js",
   "tools/vet-cost/style.css",
   "tools/vet-cost/script.js",
@@ -110,7 +111,7 @@ if (!worker.includes('from "./vet-cost-data.js"')) {
 if (!pricingData.includes("VET_COST_BASELINES")) {
   failures.push("Vet-cost baseline data is missing");
 }
-for (const route of ["/api/config", "/api/autocomplete", "/api/questions", "/api/mine", "/api/estimate", "/api/events", "/api/analytics"]) {
+for (const route of ["/api/config", "/api/status", "/api/autocomplete", "/api/questions", "/api/mine", "/api/estimate", "/api/events", "/api/analytics"]) {
   if (!worker.includes(route)) failures.push(`Worker route missing: ${route}`);
 }
 
@@ -130,4 +131,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Smoke checks passed: ${requiredFiles.length} files, ${pages.length} pages, 7 Worker routes.`);
+console.log(`Smoke checks passed: ${requiredFiles.length} files, ${pages.length} pages, 8 Worker routes.`);

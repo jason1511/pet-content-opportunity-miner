@@ -9,12 +9,16 @@ import {
   getPublicSecurityConfig,
   verifyTurnstile
 } from "./security.js";
+import { fetchWithRetry, requireOpenAi, serviceStatus } from "./reliability.js";
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/api/config") {
       return jsonResponse(getPublicSecurityConfig(env));
+    }
+    if (request.method === "GET" && url.pathname === "/api/status") {
+      return jsonResponse(serviceStatus(env));
     }
 if (request.method === "GET" && url.pathname === "/api/autocomplete") {
   try {
@@ -29,11 +33,11 @@ if (request.method === "GET" && url.pathname === "/api/autocomplete") {
     const autocompleteUrl =
       `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(keyword)}`;
 
-    const response = await fetch(autocompleteUrl, {
+    const response = await fetchWithRetry(autocompleteUrl, {
       headers: {
         "Accept": "application/json"
       }
-    });
+    }, { attempts: 2, timeoutMs: 7000, service: "Autocomplete" });
 
     if (!response.ok) {
       return jsonResponse({ error: "Autocomplete fetch failed" }, 500);
@@ -61,6 +65,9 @@ if (request.method === "POST" && url.pathname === "/api/questions") {
 
     if (!keyword) {
       return jsonResponse({ error: "Keyword required" }, 400);
+    }
+    if (!requireOpenAi(env)) {
+      return jsonResponse({ error: "AI service is not configured.", code: "ai_unavailable" }, 503);
     }
 
     const prompt = `
@@ -91,7 +98,7 @@ Rules:
 - Do not include markdown
 `;
 
-    const openAiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    const openAiResponse = await fetchWithRetry("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,15 +116,16 @@ Rules:
             content: prompt
           }
         ],
-        temperature: 0.5
+        temperature: 0.5,
+        response_format: { type: "json_object" }
       })
-    });
+    }, { attempts: 2, timeoutMs: 25000, service: "OpenAI" });
 
     if (!openAiResponse.ok) {
-      const errorText = await openAiResponse.text();
+      console.error("Question generation upstream failure", { status: openAiResponse.status });
       return jsonResponse(
-        { error: "Question generation failed", details: errorText },
-        500
+        { error: "AI question generation is temporarily unavailable.", code: "ai_upstream_error" },
+        502
       );
     }
 
@@ -171,6 +179,9 @@ const researchData = body?.researchData;
 
         if (!keyword) {
           return jsonResponse({ error: "Keyword required" }, 400);
+        }
+        if (!requireOpenAi(env)) {
+          return jsonResponse({ error: "AI service is not configured.", code: "ai_unavailable" }, 503);
         }
 
         const challenge = await verifyTurnstile(request, env, body?.turnstileToken);
@@ -238,7 +249,7 @@ Rules:
 - Do not include markdown. Only return JSON.
 `;
 
-        const openAiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        const openAiResponse = await fetchWithRetry("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -256,15 +267,16 @@ Rules:
                 content: prompt
               }
             ],
-            temperature: 0.7
+            temperature: 0.7,
+            response_format: { type: "json_object" }
           })
-        });
+        }, { attempts: 2, timeoutMs: 30000, service: "OpenAI" });
 
         if (!openAiResponse.ok) {
-          const errorText = await openAiResponse.text();
+          console.error("Opportunity analysis upstream failure", { status: openAiResponse.status });
           return jsonResponse(
-            { error: "OpenAI request failed", details: errorText },
-            500
+            { error: "AI analysis is temporarily unavailable. Please try again shortly.", code: "ai_upstream_error" },
+            502
           );
         }
 
@@ -288,7 +300,7 @@ Rules:
         return jsonResponse(parsed);
       } catch (error) {
         return jsonResponse(
-          { error: "Worker failed", details: error.message },
+          { error: "The analysis could not be completed. Please try again.", code: "analysis_failed" },
           500
         );
       }

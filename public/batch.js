@@ -1,6 +1,7 @@
 import { buildResearchSignals } from "./shared.js";
 import { trackEvent } from "./analytics-client.js";
 import { protectedJsonFetch } from "./api-security.js";
+import { initServiceStatus } from "./service-status.js";
 
 let batchDetailResults;
 let batchKeywordsInput;
@@ -11,6 +12,7 @@ let exportBatchBtn;
 let latestBatchResults = [];
 
 window.addEventListener("DOMContentLoaded", () => {
+  initServiceStatus();
   batchDetailResults = document.getElementById("batchDetailResults");
   batchKeywordsInput = document.getElementById("batchKeywords");
   runBatchBtn = document.getElementById("runBatchBtn");

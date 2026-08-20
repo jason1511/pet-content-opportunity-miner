@@ -1,6 +1,7 @@
 import { buildResearchSignals } from "./shared.js";
 import { trackEvent } from "./analytics-client.js";
 import { protectedJsonFetch } from "./api-security.js";
+import { initServiceStatus } from "./service-status.js";
 import {
   clearSavedAnalyses,
   downloadJson,
@@ -45,6 +46,7 @@ if (loadDemoBtn && keywordInput) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+  initServiceStatus();
   renderHistory();
   const params = new URLSearchParams(window.location.search);
   const keywordFromUrl = params.get("keyword");
@@ -78,7 +80,10 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Generation failed");
+      throw Object.assign(new Error(data.error || "Generation failed"), {
+        code: data.code,
+        status: response.status
+      });
     }
 
     renderGeneration(data);

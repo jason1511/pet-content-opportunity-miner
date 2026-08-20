@@ -9,11 +9,32 @@ export async function protectedJsonFetch(url, payload, options = {}) {
     turnstileToken = await requestTurnstileToken(config.turnstileSiteKey);
   }
 
-  return fetch(url, {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 45000);
+  try {
+    return await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...payload, turnstileToken })
-  });
+    body: JSON.stringify({ ...payload, turnstileToken }),
+    signal: controller.signal
+    });
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("The request took too long. Please try again.");
+    }
+    throw new Error("The service could not be reached. Please check your connection and try again.");
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+export async function readApiError(response, fallback = "Request failed") {
+  let body = {};
+  try { body = await response.json(); } catch { /* use fallback */ }
+  const error = new Error(body.error || fallback);
+  error.code = body.code || "request_failed";
+  error.status = response.status;
+  return error;
 }
 
 async function getSecurityConfig() {

@@ -1,3 +1,5 @@
+import { protectedJsonFetch } from "./api-security.js";
+
 export async function buildResearchSignals(keyword) {
   const normalized = keyword.toLowerCase().trim();
   const keywordType = classifyKeywordType(normalized);
@@ -29,16 +31,10 @@ export async function buildResearchSignals(keyword) {
   let relatedQuestions = [];
 
   try {
-    const response = await fetch("/api/questions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        keyword: normalized,
-        suggestions: autocompleteSuggestions
-      })
-    });
+    const response = await protectedJsonFetch("/api/questions", {
+      keyword: normalized,
+      suggestions: autocompleteSuggestions
+    }, { timeoutMs: 30000 });
 
     const data = await response.json();
 
