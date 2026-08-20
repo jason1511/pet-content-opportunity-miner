@@ -129,6 +129,11 @@ const research = await readFile(path.join(publicRoot, "research.html"), "utf8");
 if (!research.includes('type="module" src="single.js"')) {
   failures.push("Research page is not wired to single.js");
 }
+
+const platformNavigation = await readFile(path.join(publicRoot, "platform-nav.js"), "utf8");
+if (!platformNavigation.includes('aria-expanded="false"') || !platformNavigation.includes('aria-current="page"')) {
+  failures.push("Shared navigation is missing mobile or active-page semantics");
+}
 if (!research.includes("dog%20dental%20cleaning%20cost")) {
   failures.push("Research page is missing the connected vet-cost example");
 }
