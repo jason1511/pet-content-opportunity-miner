@@ -10,6 +10,7 @@ import {
   verifyTurnstile
 } from "./security.js";
 import { fetchWithRetry, requireOpenAi, serviceStatus } from "./reliability.js";
+import { checkAdminAuthorization } from "./admin-auth.js";
 
 export default {
   async fetch(request, env) {
@@ -169,6 +170,15 @@ Rules:
     }
 
     if (request.method === "GET" && url.pathname === "/api/analytics") {
+      const authorization = await checkAdminAuthorization(request, env);
+      if (authorization === "unconfigured") {
+        return jsonResponse({ error: "Analytics access has not been configured." }, 503);
+      }
+      if (authorization !== "authorized") {
+        return jsonResponse({ error: "Admin token required." }, 401, {
+          "WWW-Authenticate": "Bearer"
+        });
+      }
       return handleAnalyticsSummary(env);
     }
 
@@ -455,11 +465,12 @@ async function handleGetShare(env, id) {
   });
 }
 
-function jsonResponse(data, status = 200) {
+function jsonResponse(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      ...extraHeaders
     }
   });
 }

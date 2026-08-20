@@ -61,7 +61,7 @@ The estimator helps pet owners form a planning range before a common veterinary 
 
 ### Privacy-conscious analytics
 
-The [analytics dashboard](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/analytics.html) measures use across both products.
+The [analytics dashboard](https://pet-content-opportunity-miner.jasonleonard46.workers.dev/analytics.html) measures use across both products and requires an admin token.
 
 It stores only an allow-listed set of aggregate product events with an anonymous browser session ID. Raw keywords, names, email addresses, and other personal information are not collected. Events expire after 90 days.
 
@@ -106,12 +106,15 @@ Requirements:
 ```bash
 npm install
 npx wrangler secret put OPENAI_API_KEY
+npx wrangler secret put ANALYTICS_ADMIN_TOKEN
 npm run dev
 ```
 
 Open the local URL printed by Wrangler.
 
 The existing `wrangler.jsonc` contains the deployed KV binding. If you fork the project into another Cloudflare account, create your own KV namespace and replace its IDs before deploying.
+
+Optional Cloudflare Turnstile protection can be enabled by setting `TURNSTILE_SITE_KEY` as a runtime variable and `TURNSTILE_SECRET_KEY` as a secret. The public APIs retain per-client minute and daily limits even when Turnstile is not configured.
 
 ## Quality checks
 

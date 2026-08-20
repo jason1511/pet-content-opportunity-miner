@@ -22,20 +22,36 @@
       <h1>How visitors use both projects</h1>
       <p>Aggregate events connect research usage with estimator usage without storing raw keywords or personal information.</p>
     </section>
-    <p id="analyticsStatus" class="analytics-status">Loading analytics…</p>
-    <section id="metricGrid" class="metric-grid" aria-live="polite"></section>
-    <section class="analytics-panel">
-      <div>
-        <p class="eyebrow">Cross-project signal</p>
-        <h2>Research-to-utility adoption</h2>
+    <section id="analyticsLogin" class="analytics-login">
+      <p class="eyebrow">Private dashboard</p>
+      <h2>Enter the analytics admin token</h2>
+      <p>The token stays in this browser tab and is never written to local storage.</p>
+      <form id="analyticsLoginForm">
+        <label for="analyticsToken">Admin token</label>
+        <input id="analyticsToken" type="password" autocomplete="current-password" required>
+        <button type="submit">Open analytics</button>
+      </form>
+      <p id="loginStatus" class="analytics-status" aria-live="polite"></p>
+    </section>
+    <div id="analyticsDashboard" class="hidden">
+      <div class="analytics-toolbar">
+        <p id="analyticsStatus" class="analytics-status">Loading analytics…</p>
+        <button id="analyticsLogout" type="button">Lock dashboard</button>
       </div>
-      <div id="funnelGrid" class="funnel-grid"></div>
-    </section>
-    <section class="analytics-panel">
-      <p class="eyebrow">Recent activity</p>
-      <h2>Events by day</h2>
-      <div id="dailyActivity" class="daily-list"></div>
-    </section>
+      <section id="metricGrid" class="metric-grid" aria-live="polite"></section>
+      <section class="analytics-panel">
+        <div>
+          <p class="eyebrow">Cross-project signal</p>
+          <h2>Research-to-utility adoption</h2>
+        </div>
+        <div id="funnelGrid" class="funnel-grid"></div>
+      </section>
+      <section class="analytics-panel">
+        <p class="eyebrow">Recent activity</p>
+        <h2>Events by day</h2>
+        <div id="dailyActivity" class="daily-list"></div>
+      </section>
+    </div>
   </main>
   <script type="module" src="analytics-dashboard.js"></script>
 </body>

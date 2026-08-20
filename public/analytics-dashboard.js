@@ -2,14 +2,45 @@ const status = document.getElementById("analyticsStatus");
 const metricGrid = document.getElementById("metricGrid");
 const funnelGrid = document.getElementById("funnelGrid");
 const dailyActivity = document.getElementById("dailyActivity");
+const login = document.getElementById("analyticsLogin");
+const loginForm = document.getElementById("analyticsLoginForm");
+const tokenInput = document.getElementById("analyticsToken");
+const loginStatus = document.getElementById("loginStatus");
+const dashboard = document.getElementById("analyticsDashboard");
+const logout = document.getElementById("analyticsLogout");
+const TOKEN_KEY = "pet-growth-platform:analytics-token";
 
-loadAnalytics();
+const existingToken = sessionStorage.getItem(TOKEN_KEY);
+if (existingToken) loadAnalytics(existingToken);
 
-async function loadAnalytics() {
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const token = tokenInput.value.trim();
+  if (!token) return;
+  loginStatus.textContent = "Checking access…";
+  await loadAnalytics(token);
+});
+
+logout.addEventListener("click", () => {
+  sessionStorage.removeItem(TOKEN_KEY);
+  dashboard.classList.add("hidden");
+  login.classList.remove("hidden");
+  tokenInput.value = "";
+  tokenInput.focus();
+});
+
+async function loadAnalytics(token) {
   try {
-    const response = await fetch("/api/analytics");
+    const response = await fetch("/api/analytics", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Analytics unavailable");
+
+    sessionStorage.setItem(TOKEN_KEY, token);
+    login.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+    loginStatus.textContent = "";
 
     status.textContent = data.isPartial
       ? "Showing the latest 1,000 retained events."
@@ -52,7 +83,10 @@ async function loadAnalytics() {
       }
     }
   } catch (error) {
-    status.textContent = error.message;
+    sessionStorage.removeItem(TOKEN_KEY);
+    dashboard.classList.add("hidden");
+    login.classList.remove("hidden");
+    loginStatus.textContent = error.message;
   }
 }
 
