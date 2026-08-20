@@ -1,5 +1,6 @@
 import { buildResearchSignals } from "./shared.js";
 import { trackEvent } from "./analytics-client.js";
+import { protectedJsonFetch } from "./api-security.js";
 import {
   clearSavedAnalyses,
   downloadJson,
@@ -69,16 +70,10 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
     const researchData = await buildResearchSignals(keyword);
     renderResearch(researchData);
 
-    const response = await fetch("/api/mine", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        keyword,
-        researchData
-      })
-    });
+    const response = await protectedJsonFetch("/api/mine", {
+      keyword,
+      researchData
+    }, { turnstile: true });
 
     const data = await response.json();
 

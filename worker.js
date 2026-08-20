@@ -4,12 +4,22 @@ import {
   ANALYTICS_EVENT_TYPES,
   sanitizeAnalyticsMetadata
 } from "./analytics-core.js";
+import {
+  enforceRequestLimits,
+  getPublicSecurityConfig,
+  verifyTurnstile
+} from "./security.js";
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (request.method === "GET" && url.pathname === "/api/config") {
+      return jsonResponse(getPublicSecurityConfig(env));
+    }
 if (request.method === "GET" && url.pathname === "/api/autocomplete") {
   try {
+    const limited = await enforceRequestLimits(request, env, "autocomplete");
+    if (limited) return limited;
     const keyword = url.searchParams.get("keyword")?.trim();
 
     if (!keyword) {
@@ -43,6 +53,8 @@ if (request.method === "GET" && url.pathname === "/api/autocomplete") {
 }
 if (request.method === "POST" && url.pathname === "/api/questions") {
   try {
+    const limited = await enforceRequestLimits(request, env, "questions");
+    if (limited) return limited;
     const body = await request.json();
     const keyword = body?.keyword?.trim();
     const suggestions = Array.isArray(body?.suggestions) ? body.suggestions : [];
@@ -135,6 +147,8 @@ Rules:
   }
 }
     if (request.method === "POST" && url.pathname === "/api/events") {
+      const limited = await enforceRequestLimits(request, env, "events");
+      if (limited) return limited;
       return handleAnalyticsEvent(request, env);
     }
 
@@ -143,16 +157,25 @@ Rules:
     }
 
     if (request.method === "POST" && url.pathname === "/api/estimate") {
+      const limited = await enforceRequestLimits(request, env, "estimate");
+      if (limited) return limited;
       return handleVetEstimate(request, env);
     }
     if (request.method === "POST" && url.pathname === "/api/mine") {
       try {
+        const limited = await enforceRequestLimits(request, env, "mine");
+        if (limited) return limited;
         const body = await request.json();
 const keyword = body?.keyword?.trim();
 const researchData = body?.researchData;
 
         if (!keyword) {
           return jsonResponse({ error: "Keyword required" }, 400);
+        }
+
+        const challenge = await verifyTurnstile(request, env, body?.turnstileToken);
+        if (!challenge.success) {
+          return jsonResponse({ error: challenge.error, code: "turnstile_failed" }, 403);
         }
 
 const prompt = `
