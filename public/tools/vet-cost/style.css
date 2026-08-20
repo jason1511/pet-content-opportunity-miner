@@ -1,12 +1,3 @@
-:root {
-  color-scheme: light;
-  --ink: #172033;
-  --muted: #667085;
-  --surface: #ffffff;
-  --border: #e4e7ec;
-  --accent: #be185d;
-  --accent-soft: #fdf2f8;
-}
 * { box-sizing: border-box; }
 body {
   margin: 0;

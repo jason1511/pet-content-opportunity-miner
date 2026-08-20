@@ -15,6 +15,7 @@ const pages = [
 const requiredFiles = [
   ...pages,
   "home.css",
+  "platform.css",
   "base.css",
   "single.css",
   "single.js",

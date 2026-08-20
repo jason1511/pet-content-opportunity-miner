@@ -1,14 +1,3 @@
-:root {
-  --ink: #172033;
-  --muted: #667085;
-  --surface: #ffffff;
-  --border: #e4e7ec;
-  --pink: #be185d;
-  --pink-soft: #fdf2f8;
-  --blue: #175cd3;
-  --blue-soft: #eff8ff;
-  --green: #027a48;
-}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
