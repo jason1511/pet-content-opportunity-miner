@@ -1,9 +1,14 @@
 * { box-sizing: border-box; }
+:root {
+  --accent: var(--estimator);
+  --accent-dark: var(--estimator-strong);
+  --accent-soft: var(--estimator-soft);
+}
 body {
   margin: 0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
-  background: #f8fafc;
+  background: var(--page-bg);
 }
 main { max-width: 1120px; margin: 0 auto; padding: 52px 24px 80px; }
 .hero { max-width: 720px; margin-bottom: 36px; }
@@ -29,47 +34,49 @@ p { color: var(--muted); line-height: 1.65; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
-  box-shadow: 0 18px 50px rgba(16, 24, 40, .06);
+  box-shadow: var(--shadow);
 }
-.context-card ul { padding-left: 20px; color: #475467; line-height: 1.8; }
+.context-card ul { padding-left: 20px; color: var(--text-soft); line-height: 1.8; }
 form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-label { display: grid; gap: 7px; color: #344054; font-size: 14px; font-weight: 700; }
+label { display: grid; gap: 7px; color: var(--text-soft); font-size: 14px; font-weight: 700; }
 select, button {
   min-height: 46px;
   border-radius: 11px;
   font: inherit;
 }
-select { padding: 0 12px; background: white; border: 1px solid #d0d5dd; color: var(--ink); }
+select { padding: 0 12px; background: var(--surface); border: 1px solid var(--border-strong); color: var(--ink); }
 input {
   width: 100%;
   min-height: 46px;
   padding: 0 12px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--border-strong);
   border-radius: 11px;
   font: inherit;
+  color: var(--text);
+  background: var(--surface);
 }
 button {
   grid-column: 1 / -1;
   border: 0;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   font-weight: 800;
   cursor: pointer;
 }
 button:disabled { cursor: wait; opacity: .65; }
 .microcopy { grid-column: 1 / -1; margin: -4px 0 0; font-size: 12px; }
-.field-help { color: #667085; font-size: 12px; font-weight: 400; }
+.field-help { color: var(--muted); font-size: 12px; font-weight: 400; }
 .result-card {
   margin-top: 24px;
   padding: 22px;
   border-radius: 16px;
   background: var(--accent-soft);
-  border: 1px solid #fbcfe8;
+  border: 1px solid var(--estimator);
 }
 .result-card h2 { font-size: 34px; }
 dl { margin: 18px 0 0; }
-dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid #fbcfe8; }
-dt { color: #667085; }
+dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); }
+dt { color: var(--muted); }
 dd { margin: 0; text-align: right; font-weight: 700; }
 .hidden { display: none; }
 
@@ -77,17 +84,17 @@ dd { margin: 0; text-align: right; font-weight: 700; }
   max-width: 1180px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem 1.5rem;
-  border: 1px solid #b9d9c4;
-  border-left: 5px solid #2d7a50;
+  border: 1px solid var(--success-border);
+  border-left: 5px solid var(--success);
   border-radius: 16px;
-  background: #f2faf5;
+  background: var(--success-soft);
 }
 
 .research-origin h2 { margin: 0.25rem 0 0.5rem; }
-.area-comparison { margin-top: 1rem; padding: 1rem; border-radius: 12px; background: #fff; }
+.area-comparison { margin-top: 1rem; padding: 1rem; border-radius: 12px; background: var(--surface); }
 .area-comparison h3 { margin: 0 0 0.5rem; }
 .area-comparison p { margin: 0.35rem 0; }
-.clinic-link { display: inline-block; margin-top: 1rem; font-weight: 700; color: #175cd3; }
+.clinic-link { display: inline-block; margin-top: 1rem; font-weight: 700; color: var(--info); }
 @media (max-width: 760px) {
   main { padding-top: 30px; }
   .estimator-layout, form { grid-template-columns: 1fr; }
@@ -96,10 +103,10 @@ dd { margin: 0; text-align: right; font-weight: 700; }
 .methodology {
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1px solid #fbcfe8;
+  border-top: 1px solid var(--border);
 }
 .methodology h3 { margin: 0 0 8px; font-size: 17px; }
 .methodology p { margin: 6px 0; font-size: 13px; }
 .methodology ul { margin: 12px 0 0; padding-left: 20px; }
-.methodology li { margin: 8px 0; color: #475467; }
-.methodology a { color: #175cd3; font-weight: 650; }
+.methodology li { margin: 8px 0; color: var(--text-soft); }
+.methodology a { color: var(--info); font-weight: 650; }

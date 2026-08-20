@@ -7,15 +7,15 @@
 .workflow-step {
   padding: 6px 10px;
   border-radius: 999px;
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--surface-subtle);
+  color: var(--text-soft);
   font-weight: 700;
   font-size: 12px;
 }
 
 .workflow-step.active {
-  background: #fde7f3;
-  color: #be185d;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .qa-list {
@@ -32,15 +32,15 @@
 }
 
 .qa-pass {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #166534;
+  background: var(--success-soft);
+  border-color: var(--success-border);
+  color: var(--success);
 }
 
 .qa-fail {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #991b1b;
+  background: var(--danger-soft);
+  border-color: var(--danger-border);
+  color: var(--danger);
 }
 
 .demo-banner {
@@ -72,7 +72,7 @@
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .value-box h3 {
@@ -97,7 +97,7 @@
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .how-step h3 {
@@ -141,8 +141,8 @@
 .history-item p { margin: 0; color: var(--muted); }
 .history-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .history-actions .secondary-btn { width: auto; margin: 0; }
-.danger-btn { background: #991b1b; }
-.connection-callout, .product-bridge-card { border-left: 4px solid var(--accent, #2e7d55); }
+.danger-btn { background: var(--danger); }
+.connection-callout, .product-bridge-card { border-left: 4px solid var(--accent); }
 .signal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -153,7 +153,7 @@
   padding: 0.8rem;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #f8faf9;
+  background: var(--surface-subtle);
 }
 .signal-grid span, .signal-grid strong { display: block; }
 .signal-grid span { margin-bottom: 0.25rem; color: var(--muted); font-size: 0.8rem; }

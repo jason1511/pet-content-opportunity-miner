@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background: linear-gradient(180deg, #f8fafc 0%, #f3f4f6 100%);
+  background: linear-gradient(180deg, var(--page-bg) 0%, var(--surface-subtle) 100%);
   color: var(--text);
 }
 
@@ -13,19 +13,19 @@ body {
   width: fit-content;
   margin: 0 0 1rem auto;
   padding: 0.45rem 0.75rem;
-  border: 1px solid #b8d8c0;
+  border: 1px solid var(--success-border);
   border-radius: 999px;
-  background: #edf8f0;
-  color: #25623a;
+  background: var(--success-soft);
+  color: var(--success);
   font-size: 0.82rem;
   font-weight: 700;
 }
 
 .service-status-degraded,
 .service-status-offline {
-  border-color: #efd18c;
-  background: #fff8e7;
-  color: #775612;
+  border-color: var(--warning-border);
+  background: var(--warning-soft);
+  color: var(--warning);
 }
 
 .container {
@@ -59,12 +59,12 @@ h1 {
   max-width: 760px;
   font-size: 17px;
   line-height: 1.6;
-  color: #4b5563;
+  color: var(--text-soft);
 }
 
 .card {
   background: var(--card);
-  border: 1px solid rgba(229, 231, 235, 0.9);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 14px;
@@ -93,16 +93,17 @@ input {
   flex: 1;
   padding: 16px 18px;
   font-size: 17px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-strong);
   border-radius: 12px;
   outline: none;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.12);
+  box-shadow: var(--focus-ring);
 }
 
 button {
@@ -113,9 +114,9 @@ button {
   font-weight: 700;
   cursor: pointer;
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: white;
+  color: var(--on-accent);
   transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.28);
+  box-shadow: var(--shadow-sm);
 }
 
 button:hover {
@@ -147,19 +148,19 @@ h2 {
 }
 
 .score-card {
-  background: linear-gradient(135deg, #ec4899, #db2777);
-  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: var(--on-accent);
   border-radius: 14px;
   padding: 18px;
   margin-bottom: 14px;
-  box-shadow: 0 12px 28px rgba(219, 39, 119, 0.28);
+  box-shadow: var(--shadow);
 }
 
 .score-card h2 {
   margin: 0 0 10px;
   font-size: 16px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--on-accent);
 }
 
 .score {
@@ -171,11 +172,11 @@ h2 {
 
 .score-card p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--on-accent);
 }
 
 .result-card {
-  background: #fff;
+  background: var(--surface);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 14px;
@@ -193,7 +194,7 @@ h2 {
   margin: 0 0 12px;
   margin-bottom: 8px;
   line-height: 1.75;
-  color: #374151;
+  color: var(--text-soft);
 }
 
 .result-card ul {
@@ -204,13 +205,13 @@ h2 {
 .result-card li {
   margin-bottom: 10px;
   line-height: 1.65;
-  color: #374151;
+  color: var(--text-soft);
 }
 
 .result-card li strong {
   display: inline-block;
   margin-bottom: 4px;
-  color: #111827;
+  color: var(--text);
 }
 
 .actions-row {
@@ -221,14 +222,14 @@ h2 {
 }
 
 .secondary-btn {
-  background: white;
-  color: #111827;
+  background: var(--surface);
+  color: var(--text);
   border: 1px solid var(--border);
   box-shadow: none;
 }
 
 .secondary-btn:hover {
-  background: #f9fafb;
+  background: var(--surface-subtle);
   transform: translateY(-1px);
 }
 
@@ -252,21 +253,21 @@ h2 {
   padding: 10px 14px;
   border-radius: 999px;
   text-decoration: none;
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--surface-subtle);
+  color: var(--text-soft);
   font-weight: 700;
   font-size: 14px;
   border: 1px solid var(--border);
 }
 
 .nav-link:hover {
-  background: #eceff3;
+  background: var(--surface-raised);
 }
 
 .active-nav-link {
-  background: #fde7f3;
-  color: #be185d;
-  border-color: #f9a8d4;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .action-link {
