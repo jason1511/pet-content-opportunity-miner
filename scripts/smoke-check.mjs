@@ -119,6 +119,9 @@ const research = await readFile(path.join(publicRoot, "research.html"), "utf8");
 if (!research.includes('type="module" src="single.js"')) {
   failures.push("Research page is not wired to single.js");
 }
+if (!research.includes("dog%20dental%20cleaning%20cost")) {
+  failures.push("Research page is missing the connected vet-cost example");
+}
 
 const batchScript = await readFile(path.join(publicRoot, "batch.js"), "utf8");
 if (!batchScript.includes("research.html?keyword=")) {

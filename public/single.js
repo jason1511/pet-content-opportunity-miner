@@ -12,6 +12,7 @@ import {
 const generateBtn = document.getElementById("generateBtn");
 const keywordInput = document.getElementById("keyword");
 const loadDemoBtn = document.getElementById("loadDemoBtn");
+const loadConnectedDemoBtn = document.getElementById("loadConnectedDemoBtn");
 const exportLatestBtn = document.getElementById("exportLatestBtn");
 const exportHistoryBtn = document.getElementById("exportHistoryBtn");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
@@ -40,6 +41,14 @@ if (generateBtn && keywordInput) {
 if (loadDemoBtn && keywordInput) {
   loadDemoBtn.addEventListener("click", async () => {
     const demoKeyword = "dog insurance";
+    keywordInput.value = demoKeyword;
+    await runWorkflow(demoKeyword);
+  });
+}
+
+if (loadConnectedDemoBtn && keywordInput) {
+  loadConnectedDemoBtn.addEventListener("click", async () => {
+    const demoKeyword = "dog dental cleaning cost";
     keywordInput.value = demoKeyword;
     await runWorkflow(demoKeyword);
   });
@@ -163,6 +172,7 @@ function renderResearch(data) {
 
 function renderGeneration(data) {
   const score = Number(data.opportunity_score || 0).toFixed(1);
+  const estimatorLink = buildEstimatorLink(keywordInput?.value || "");
 
   generationResults.innerHTML = `
     <div class="score-card">
@@ -228,7 +238,28 @@ function renderGeneration(data) {
       </ul>
       <p><strong>CTA:</strong> ${data.page_brief.cta}</p>
     </div>
+
+    <div class="result-card product-bridge-card">
+      <p class="eyebrow">Next step: build</p>
+      <h3>Continue from research to customer utility</h3>
+      <p>The Vet Cost Estimator is the platform's worked example of turning pet-cost demand into an interactive experience.</p>
+      <a class="secondary-btn action-link" href="${estimatorLink}">Open the resulting customer tool</a>
+    </div>
   `;
+}
+
+function buildEstimatorLink(keyword) {
+  const normalized = String(keyword || "").toLowerCase();
+  const visitType = normalized.includes("dental")
+    ? "dental"
+    : normalized.includes("vaccin")
+      ? "vaccination"
+      : normalized.includes("emergency")
+        ? "emergency"
+        : "checkup";
+  const petType = normalized.includes("cat") ? "cat" : "dog";
+  const params = new URLSearchParams({ source: "research", keyword, visitType, petType });
+  return `tools/vet-cost/?${params.toString()}`;
 }
 
 function runQaChecks(keyword, data) {

@@ -142,10 +142,18 @@
 .history-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .history-actions .secondary-btn { width: auto; margin: 0; }
 .danger-btn { background: #991b1b; }
+.connection-callout, .product-bridge-card { border-left: 4px solid var(--accent, #2e7d55); }
+.connection-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
 @media (max-width: 640px) {
   .export-card, .history-heading, .history-item {
     align-items: stretch;
     flex-direction: column;
   }
   .history-actions .secondary-btn, .export-card .secondary-btn { width: 100%; }
+  .connection-callout { align-items: flex-start; flex-direction: column; }
 }

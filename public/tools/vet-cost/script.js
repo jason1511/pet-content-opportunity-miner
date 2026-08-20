@@ -11,6 +11,8 @@ const methodologyText = document.getElementById("methodologyText");
 const dataVersion = document.getElementById("dataVersion");
 const sourceList = document.getElementById("sourceList");
 
+applyResearchContext();
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   submitButton.disabled = true;
@@ -72,3 +74,23 @@ form.addEventListener("submit", async (event) => {
     submitButton.textContent = "Estimate cost";
   }
 });
+
+function applyResearchContext() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("source") !== "research") return;
+
+  const keyword = params.get("keyword") || "pet vet cost";
+  const petType = params.get("petType");
+  const visitType = params.get("visitType");
+  if (["dog", "cat"].includes(petType)) document.getElementById("petType").value = petType;
+  if (["checkup", "vaccination", "dental", "emergency"].includes(visitType)) {
+    document.getElementById("visitType").value = visitType;
+  }
+
+  const origin = document.getElementById("researchOrigin");
+  const text = document.getElementById("researchOriginText");
+  const link = document.getElementById("researchOriginLink");
+  text.textContent = `This estimator is the worked product example connected to the “${keyword}” opportunity.`;
+  link.href = `../../research.html?keyword=${encodeURIComponent(keyword)}`;
+  origin.classList.remove("hidden");
+}
