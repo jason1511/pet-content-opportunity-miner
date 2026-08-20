@@ -1,3 +1,5 @@
+import { createThemeControl } from "./theme.js";
+
 class PlatformNav extends HTMLElement {
   connectedCallback() {
     const root = this.getAttribute("root") || "./";
@@ -36,6 +38,7 @@ class PlatformNav extends HTMLElement {
 
     const button = this.querySelector(".platform-menu-button");
     const panel = this.querySelector(".platform-menu-panel");
+    createThemeControl(this.querySelector(".platform-theme-slot"));
     const closeMenu = () => {
       this.removeAttribute("data-menu-open");
       button.setAttribute("aria-expanded", "false");

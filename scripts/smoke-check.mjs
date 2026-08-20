@@ -17,6 +17,8 @@ const requiredFiles = [
   "home.css",
   "platform.css",
   "platform-nav.js",
+  "theme-init.js",
+  "theme.js",
   "base.css",
   "single.css",
   "single.js",
@@ -133,6 +135,9 @@ if (!research.includes('type="module" src="single.js"')) {
 const platformNavigation = await readFile(path.join(publicRoot, "platform-nav.js"), "utf8");
 if (!platformNavigation.includes('aria-expanded="false"') || !platformNavigation.includes('aria-current="page"')) {
   failures.push("Shared navigation is missing mobile or active-page semantics");
+}
+if (!platformNavigation.includes("createThemeControl")) {
+  failures.push("Shared navigation is missing the theme control");
 }
 if (!research.includes("dog%20dental%20cleaning%20cost")) {
   failures.push("Research page is missing the connected vet-cost example");
