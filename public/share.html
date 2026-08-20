@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Opportunity Report | Pet Growth Platform</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="share.css" />
+</head>
+<body>
+  <main class="container report-shell">
+    <nav class="report-nav">
+      <a href="index.html">Pet Growth Platform</a>
+      <button id="printReport" type="button">Print / Save PDF</button>
+    </nav>
+    <header class="report-header">
+      <p class="eyebrow">Opportunity report</p>
+      <h1 id="reportTitle">Loading report…</h1>
+      <p id="reportMeta" class="subtitle"></p>
+    </header>
+    <div id="reportStatus" class="card">Retrieving the shared analysis…</div>
+    <article id="reportContent" class="hidden">
+      <section class="report-score card"><span>Opportunity score</span><strong id="reportScore"></strong><p id="reportReason"></p></section>
+      <section class="card"><h2>Recommendation</h2><p id="reportRecommendation"></p></section>
+      <section class="card"><h2>Insight summary</h2><p id="reportInsight"></p></section>
+      <section class="card"><h2>Research indicators</h2><div id="reportSignals" class="report-grid"></div></section>
+      <section class="card"><h2>Risks</h2><ul id="reportRisks"></ul></section>
+      <section class="card"><h2>Landing-page brief</h2><h3 id="reportHeadline"></h3><ul id="reportSections"></ul><p><strong>CTA:</strong> <span id="reportCta"></span></p></section>
+      <section class="card report-footnote"><p>This report contains directional research proxies and AI-assisted analysis. It does not claim measured search volume or keyword difficulty.</p></section>
+    </article>
+  </main>
+  <script type="module" src="share.js"></script>
+</body>
+</html>

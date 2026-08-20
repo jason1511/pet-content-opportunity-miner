@@ -113,9 +113,15 @@
   <section class="card export-card">
     <div>
       <h2>Export Current Analysis</h2>
-      <p class="helper-text">Download the complete research signals, generated brief, score, and QA result.</p>
+      <p class="helper-text">Name the project, download its data, or create a public 30-day report link that can be printed to PDF.</p>
+      <label class="label" for="projectName">Project name</label>
+      <input id="projectName" type="text" maxlength="80" placeholder="e.g. Pet dental acquisition campaign" />
     </div>
-    <button id="exportLatestBtn" class="secondary-btn" disabled>Download JSON</button>
+    <div class="history-actions">
+      <button id="saveNamedBtn" class="secondary-btn" disabled>Save name</button>
+      <button id="exportLatestBtn" class="secondary-btn" disabled>Download JSON</button>
+      <button id="shareLatestBtn" class="secondary-btn" disabled>Share / PDF report</button>
+    </div>
   </section>
 
   <section class="card">

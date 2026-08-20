@@ -16,6 +16,9 @@ const loadConnectedDemoBtn = document.getElementById("loadConnectedDemoBtn");
 const exportLatestBtn = document.getElementById("exportLatestBtn");
 const exportHistoryBtn = document.getElementById("exportHistoryBtn");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+const projectNameInput = document.getElementById("projectName");
+const saveNamedBtn = document.getElementById("saveNamedBtn");
+const shareLatestBtn = document.getElementById("shareLatestBtn");
 const historyResults = document.getElementById("historyResults");
 let latestAnalysis = null;
 
@@ -113,6 +116,8 @@ qaResults.innerHTML = `<p class="loading-text">✅ Running QA checks...</p>`;
     }
 
     if (exportLatestBtn) exportLatestBtn.disabled = false;
+    if (saveNamedBtn) saveNamedBtn.disabled = false;
+    if (shareLatestBtn) shareLatestBtn.disabled = false;
     trackEvent("research_completed", {
       keywordType: researchData.keywordType,
       scoreBand: Math.min(10, Math.max(0, Math.round(Number(data.opportunity_score || 0))))
@@ -471,6 +476,42 @@ if (exportLatestBtn) {
   });
 }
 
+if (saveNamedBtn) {
+  saveNamedBtn.addEventListener("click", () => {
+    if (!latestAnalysis) return;
+    const projectName = projectNameInput?.value.trim();
+    if (!projectName) {
+      projectNameInput?.focus();
+      return;
+    }
+    latestAnalysis = saveAnalysis({ ...latestAnalysis, projectName });
+    renderHistory();
+    saveNamedBtn.textContent = "Saved";
+    setTimeout(() => { saveNamedBtn.textContent = "Save name"; }, 1200);
+  });
+}
+
+if (shareLatestBtn) {
+  shareLatestBtn.addEventListener("click", async () => {
+    if (!latestAnalysis) return;
+    shareLatestBtn.disabled = true;
+    shareLatestBtn.textContent = "Creating report...";
+    try {
+      const projectName = projectNameInput?.value.trim();
+      const analysis = projectName ? { ...latestAnalysis, projectName } : latestAnalysis;
+      const response = await protectedJsonFetch("/api/share", { analysis });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not create report");
+      window.open(data.url, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      shareLatestBtn.disabled = false;
+      shareLatestBtn.textContent = "Share / PDF report";
+    }
+  });
+}
+
 if (exportHistoryBtn) {
   exportHistoryBtn.addEventListener("click", () => {
     downloadJson("pet-content-analysis-history.json", getSavedAnalyses());
@@ -509,10 +550,10 @@ function renderHistory() {
 
     const copy = document.createElement("div");
     const title = document.createElement("h3");
-    title.textContent = item.keyword;
+    title.textContent = item.projectName || item.keyword;
     const meta = document.createElement("p");
     const score = Number(item.analysis?.opportunity_score || 0).toFixed(1);
-    meta.textContent = `${score}/10 · ${new Date(item.savedAt).toLocaleString()}`;
+    meta.textContent = `${item.keyword} · ${score}/10 · ${new Date(item.savedAt).toLocaleString()}`;
     copy.append(title, meta);
 
     const actions = document.createElement("div");

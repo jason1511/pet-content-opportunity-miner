@@ -20,6 +20,14 @@ export default {
     if (request.method === "GET" && url.pathname === "/api/status") {
       return jsonResponse(serviceStatus(env));
     }
+    if (request.method === "POST" && url.pathname === "/api/share") {
+      const limited = await enforceRequestLimits(request, env, "share");
+      if (limited) return limited;
+      return handleCreateShare(request, env, url);
+    }
+    if (request.method === "GET" && url.pathname.startsWith("/api/share/")) {
+      return handleGetShare(env, url.pathname.slice("/api/share/".length));
+    }
 if (request.method === "GET" && url.pathname === "/api/autocomplete") {
   try {
     const limited = await enforceRequestLimits(request, env, "autocomplete");
@@ -398,6 +406,51 @@ async function handleAnalyticsSummary(env) {
     ...aggregateAnalytics(events),
     isPartial: !listed.list_complete,
     privacy: "Aggregate product events only; raw keywords and personal information are not collected."
+  });
+}
+
+async function handleCreateShare(request, env, url) {
+  if (!env.VET_ESTIMATES) return jsonResponse({ error: "Sharing is unavailable." }, 503);
+
+  try {
+    const body = await request.json();
+    const analysis = body?.analysis;
+    const serialized = JSON.stringify(analysis);
+    if (!analysis || typeof analysis !== "object" || serialized.length > 100000) {
+      return jsonResponse({ error: "Invalid or oversized analysis." }, 400);
+    }
+    if (typeof analysis.keyword !== "string" || analysis.keyword.length > 160) {
+      return jsonResponse({ error: "Invalid analysis keyword." }, 400);
+    }
+
+    const id = crypto.randomUUID().replaceAll("-", "");
+    const record = {
+      ...analysis,
+      sharedAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 2592000000).toISOString()
+    };
+    await env.VET_ESTIMATES.put(`share:${id}`, JSON.stringify(record), { expirationTtl: 2592000 });
+    return jsonResponse({
+      id,
+      url: `${url.origin}/share.html?id=${id}`,
+      expiresAt: record.expiresAt
+    }, 201);
+  } catch {
+    return jsonResponse({ error: "The report could not be shared." }, 400);
+  }
+}
+
+async function handleGetShare(env, id) {
+  if (!env.VET_ESTIMATES || !/^[a-f0-9]{32}$/.test(id)) {
+    return jsonResponse({ error: "Shared report not found." }, 404);
+  }
+  const report = await env.VET_ESTIMATES.get(`share:${id}`, "json");
+  if (!report) return jsonResponse({ error: "Shared report not found or expired." }, 404);
+  return new Response(JSON.stringify(report), {
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=300"
+    }
   });
 }
 
